@@ -1,0 +1,11 @@
+{
+  "name": "com.djm.core-tools",
+  "version": "0.1.0",
+  "displayName": "DJM Core Tools",
+  "description": "Core tools for Unity.",
+  "author": {
+    "name": "danjm.dev",
+    "email": "danjm.dev@gmail.com",
+    "url": "https://github.com/danjm-dev"
+  }
+}
