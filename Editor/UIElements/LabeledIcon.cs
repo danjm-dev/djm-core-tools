@@ -3,11 +3,10 @@ using UnityEngine.UIElements;
 
 namespace DJM.CoreTools.Editor.UIElements
 {
-    public sealed class LabeledIcon : VisualElement
+    public sealed class LabeledIcon : TextElement
     {
         public const string USSClassName = "djm-labeled-icon";
         
-        private TextElement _label;
         private Image _icon;
 
         public LabeledIcon() : this(string.Empty)
@@ -17,7 +16,7 @@ namespace DJM.CoreTools.Editor.UIElements
         public LabeledIcon(string text)
         {
             AddToClassList(USSClassName);
-            _label.text = text;
+            this.text = text;
             
             _icon = new Image();
             var texture = new Texture2D(5, 5);
@@ -32,7 +31,6 @@ namespace DJM.CoreTools.Editor.UIElements
             _icon.style.backgroundImage = new StyleBackground(texture);
             
             Add(_icon);
-            Add(_label);
         }
         
         public new class UxmlFactory : UxmlFactory<LabeledIcon, UxmlTraits> { }
