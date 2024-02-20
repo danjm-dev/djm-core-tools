@@ -19,13 +19,6 @@ namespace DJM.CoreTools.Utilities
         }
         
         [BurstCompile]
-        public static bool TryOffsetIndex(int index, in int2 resolution, in int2 offset, out int offsetIndex)
-        {
-            offsetIndex = OffsetIndex(index, resolution, offset);
-            return IsIndexInBounds(offsetIndex, resolution);
-        }
-        
-        [BurstCompile]
         public static bool IsIndexInBounds(int index, in int2 resolution)
         {
             return index >= 0 && index < resolution.x * resolution.y;
