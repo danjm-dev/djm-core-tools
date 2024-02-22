@@ -4,7 +4,7 @@ using Unity.Mathematics;
 namespace DJM.CoreTools.Utilities
 {
     [BurstCompile]
-    public static class CoordinateUtilities
+    public static partial class CoordinateUtilities
     {
         public static readonly int2 Left = new (-1, 0);
         public static readonly int2 Right = new (1, 0);
@@ -33,6 +33,32 @@ namespace DJM.CoreTools.Utilities
         public static void GetUpCoordinates(in int2 coordinates, out int2 upCoordinates)
         {
             upCoordinates = coordinates + Up;
+        }
+    }
+
+    // bounds
+    public static partial class CoordinateUtilities
+    {
+        [BurstCompile]
+        public static bool IsCoordinateInBoundsInclusive(in int2 boundsMin, in int2 boundsMax, in int2 coordinate)
+        {
+            return coordinate >= boundsMin is { x: true, y: true } 
+                   && coordinate <= boundsMax is { x: true, y: true };
+        }
+        
+        [BurstCompile]
+        public static bool IsCoordinateInBoundsExclusive(in int2 boundsMin, in int2 boundsMax, in int2 coordinate)
+        {
+            return coordinate > boundsMin is { x: true, y: true } 
+                   && coordinate < boundsMax is { x: true, y: true };
+        }
+        
+        [BurstCompile]
+        public static bool IsCoordinateOnBoundsEdge(in int2 boundsMin, in int2 boundsMax, in int2 point)
+        {
+            var minimumOnBounds = point == boundsMin;
+            var maximumOnBounds = point == boundsMax;
+            return minimumOnBounds.x || minimumOnBounds.y || maximumOnBounds.x || maximumOnBounds.y;
         }
     }
 }
