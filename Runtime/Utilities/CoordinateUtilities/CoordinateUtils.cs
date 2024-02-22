@@ -4,7 +4,7 @@ using Unity.Mathematics;
 namespace DJM.CoreTools.Utilities
 {
     [BurstCompile]
-    public static partial class CoordinateUtils
+    public static class CoordinateUtils
     {
         public static readonly int2 Left = new (-1, 0);
         public static readonly int2 Right = new (1, 0);
@@ -34,11 +34,9 @@ namespace DJM.CoreTools.Utilities
         {
             upCoordinates = coordinates + Up;
         }
-    }
-
-    // bounds
-    public static partial class CoordinateUtils
-    {
+        
+        
+        
         [BurstCompile]
         public static bool IsCoordinateInBoundsInclusive(in int2 boundsMin, in int2 boundsMax, in int2 coordinate)
         {
@@ -61,4 +59,30 @@ namespace DJM.CoreTools.Utilities
             return minimumOnBounds.x || minimumOnBounds.y || maximumOnBounds.x || maximumOnBounds.y;
         }
     }
+
+    // // bounds
+    // public static partial class CoordinateUtils
+    // {
+    //     [BurstCompile]
+    //     public static bool IsCoordinateInBoundsInclusive(in int2 boundsMin, in int2 boundsMax, in int2 coordinate)
+    //     {
+    //         return coordinate >= boundsMin is { x: true, y: true } 
+    //                && coordinate <= boundsMax is { x: true, y: true };
+    //     }
+    //     
+    //     [BurstCompile]
+    //     public static bool IsCoordinateInBoundsExclusive(in int2 boundsMin, in int2 boundsMax, in int2 coordinate)
+    //     {
+    //         return coordinate > boundsMin is { x: true, y: true } 
+    //                && coordinate < boundsMax is { x: true, y: true };
+    //     }
+    //     
+    //     [BurstCompile]
+    //     public static bool IsCoordinateOnBoundsEdge(in int2 boundsMin, in int2 boundsMax, in int2 point)
+    //     {
+    //         var minimumOnBounds = point == boundsMin;
+    //         var maximumOnBounds = point == boundsMax;
+    //         return minimumOnBounds.x || minimumOnBounds.y || maximumOnBounds.x || maximumOnBounds.y;
+    //     }
+    // }
 }
