@@ -31,5 +31,10 @@ namespace DJM.CoreTools.Extensions
         {
             return (current - target).sqrMagnitude <= range * range;
         }
+
+        public static Vector3 X0Y(this Vector2 current)
+        {
+            return new Vector3(current.x, 0f, current.y);
+        }
     }
 }
