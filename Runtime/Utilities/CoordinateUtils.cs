@@ -15,25 +15,25 @@ namespace DJM.CoreTools.Utilities
         
         
         [BurstCompile]
-        public static void GetLeftCoordinates(in int2 coordinates, out int2 leftCoordinates)
+        public static void GetLeftCoordinate(in int2 coordinates, out int2 leftCoordinates)
         {
             leftCoordinates = coordinates + Left;
         }
         
         [BurstCompile]
-        public static void GetRightCoordinates(in int2 coordinates, out int2 rightCoordinates)
+        public static void GetRightCoordinate(in int2 coordinates, out int2 rightCoordinates)
         {
             rightCoordinates = coordinates + Right;
         }
         
         [BurstCompile]
-        public static void GetDownCoordinates(in int2 coordinates, out int2 downCoordinates)
+        public static void GetDownCoordinate(in int2 coordinates, out int2 downCoordinates)
         {
             downCoordinates = coordinates + Down;
         }
         
         [BurstCompile]
-        public static void GetUpCoordinates(in int2 coordinates, out int2 upCoordinates)
+        public static void GetUpCoordinate(in int2 coordinates, out int2 upCoordinates)
         {
             upCoordinates = coordinates + Up;
         }
@@ -61,6 +61,23 @@ namespace DJM.CoreTools.Utilities
             var minimumOnBounds = point == boundsMin;
             var maximumOnBounds = point == boundsMax;
             return minimumOnBounds.x || minimumOnBounds.y || maximumOnBounds.x || maximumOnBounds.y;
+        }
+        
+        [BurstCompile]
+        public static void GetBoundsCornerCoordinates
+        (
+            in int2 boundsMin, 
+            in int2 boundsMax, 
+            out int2 leftDown, 
+            out int2 leftUp, 
+            out int2 rightDown, 
+            out int2 rightUp
+        )
+        {
+            leftDown = boundsMin;
+            leftUp = new int2(boundsMin.x, boundsMax.y);
+            rightDown = new int2(boundsMax.x, boundsMin.y);
+            rightUp = boundsMax;
         }
     }
 }
