@@ -4,7 +4,7 @@ using Unity.Mathematics;
 namespace DJM.CoreTools.Utilities
 {
     [BurstCompile]
-    public static partial class CoordinateUtilities
+    public static partial class CoordinateUtils
     {
         public static readonly int2 Left = new (-1, 0);
         public static readonly int2 Right = new (1, 0);
@@ -37,7 +37,7 @@ namespace DJM.CoreTools.Utilities
     }
 
     // bounds
-    public static partial class CoordinateUtilities
+    public static partial class CoordinateUtils
     {
         [BurstCompile]
         public static bool IsCoordinateInBoundsInclusive(in int2 boundsMin, in int2 boundsMax, in int2 coordinate)
