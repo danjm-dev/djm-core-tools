@@ -11,6 +11,9 @@ namespace DJM.CoreTools.Utilities
         public static readonly int2 Up = new (0, 1);
         public static readonly int2 Down = new (0, -1);
         
+        public static readonly int2[] OrthogonalDirections = {Left, Right, Up, Down};
+        
+        
         [BurstCompile]
         public static void GetLeftCoordinates(in int2 coordinates, out int2 leftCoordinates)
         {
