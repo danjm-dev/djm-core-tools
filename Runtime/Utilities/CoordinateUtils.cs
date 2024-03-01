@@ -16,51 +16,51 @@ namespace DJM.CoreTools.Utilities
         public static readonly int2 NorthWest = new (-1, 1);
         
         [BurstCompile]
-        public static void GetNorthCoordinate(in int2 coordinates, out int2 northCoordinates)
+        public static void GetNorthCoordinate(in int2 coordinate, out int2 northCoordinate)
         {
-            northCoordinates = coordinates + North;
+            northCoordinate = coordinate + North;
         }
 
         [BurstCompile]
-        public static void GetNorthEastCoordinate(in int2 coordinates, out int2 northEastCoordinates)
+        public static void GetNorthEastCoordinate(in int2 coordinate, out int2 northEastCoordinate)
         {
-            northEastCoordinates = coordinates + NorthEast;
+            northEastCoordinate = coordinate + NorthEast;
         }
         
         [BurstCompile]
-        public static void GetEastCoordinate(in int2 coordinates, out int2 eastCoordinates)
+        public static void GetEastCoordinate(in int2 coordinate, out int2 eastCoordinate)
         {
-            eastCoordinates = coordinates + East;
+            eastCoordinate = coordinate + East;
         }
         
         [BurstCompile]
-        public static void GetSouthEastCoordinate(in int2 coordinates, out int2 southEastCoordinates)
+        public static void GetSouthEastCoordinate(in int2 coordinate, out int2 southEastCoordinate)
         {
-            southEastCoordinates = coordinates + SouthEast;
+            southEastCoordinate = coordinate + SouthEast;
         }
         
         [BurstCompile]
-        public static void GetSouthCoordinate(in int2 coordinates, out int2 southCoordinates)
+        public static void GetSouthCoordinate(in int2 coordinate, out int2 southCoordinate)
         {
-            southCoordinates = coordinates + South;
+            southCoordinate = coordinate + South;
         }
         
         [BurstCompile]
-        public static void GetSouthWestCoordinate(in int2 coordinates, out int2 southWestCoordinates)
+        public static void GetSouthWestCoordinate(in int2 coordinate, out int2 southWestCoordinate)
         {
-            southWestCoordinates = coordinates + SouthWest;
+            southWestCoordinate = coordinate + SouthWest;
         }
         
         [BurstCompile]
-        public static void GetWestCoordinate(in int2 coordinates, out int2 westCoordinates)
+        public static void GetWestCoordinate(in int2 coordinate, out int2 westCoordinate)
         {
-            westCoordinates = coordinates + West;
+            westCoordinate = coordinate + West;
         }
         
         [BurstCompile]
-        public static void GetNorthWestCoordinate(in int2 coordinates, out int2 northWestCoordinates)
+        public static void GetNorthWestCoordinate(in int2 coordinate, out int2 northWestCoordinate)
         {
-            northWestCoordinates = coordinates + NorthWest;
+            northWestCoordinate = coordinate + NorthWest;
         }
         
         [BurstCompile]
