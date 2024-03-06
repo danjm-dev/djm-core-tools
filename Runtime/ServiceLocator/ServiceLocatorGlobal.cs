@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace DJM.CoreTools.ServiceLocator
 {
-    [AddComponentMenu("ServiceLocator/ServiceLocator Global")]
-    public class ServiceLocatorGlobal : Bootstrapper 
+    [AddComponentMenu("ServiceLocator/Global")]
+    public class ServiceLocatorGlobal : ServiceLocatorBootstrapper 
     {
         [SerializeField] private bool dontDestroyOnLoad = true;
         

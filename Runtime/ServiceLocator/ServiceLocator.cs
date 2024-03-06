@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using DJM.CoreTools.Extensions;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,44 +8,12 @@ namespace DJM.CoreTools.ServiceLocator
 {
     public class ServiceLocator : MonoBehaviour 
     {
-        private const string GlobalServiceLocatorName = "ServiceLocator [Global]";
-        private const string SceneServiceLocatorName = "ServiceLocator [Scene]";
+        private const string GlobalServiceLocatorName = "[ServiceLocator (Global)]";
         
         private static ServiceLocator _globalContainer;
         private static Dictionary<Scene, ServiceLocator> _sceneContainers;
-        private static List<GameObject> _tmpSceneGameObjects;
 
         private readonly ServiceManager _services = new ();
-
-        internal void ConfigureAsGlobal(bool dontDestroyOnLoad) 
-        {
-            if (_globalContainer == this) 
-            {
-                Debug.LogWarning("ServiceLocator.ConfigureAsGlobal: Already configured as global", this);
-            } 
-            else if (_globalContainer != null) 
-            {
-                Debug.LogError("ServiceLocator.ConfigureAsGlobal: Another ServiceLocator is already configured as global", this);
-            } 
-            else 
-            {
-                _globalContainer = this;
-                if (dontDestroyOnLoad) DontDestroyOnLoad(gameObject);
-            }
-        }
-
-        internal void ConfigureForScene() 
-        {
-            var scene = gameObject.scene;
-
-            if (_sceneContainers.ContainsKey(scene)) 
-            {
-                Debug.LogError("ServiceLocator.ConfigureForScene: Another ServiceLocator is already configured for this scene", this);
-                return;
-            }
-            
-            _sceneContainers.Add(scene, this);
-        }
         
         /// <summary>
         /// Gets the global ServiceLocator instance. Creates new if none exists.
@@ -64,9 +30,13 @@ namespace DJM.CoreTools.ServiceLocator
                     return _globalContainer;
                 }
                 
-                var container = new GameObject(GlobalServiceLocatorName, typeof(ServiceLocator));
-                container.AddComponent<ServiceLocatorGlobal>().BootstrapOnDemand();
-
+                var container = new GameObject
+                (
+                    GlobalServiceLocatorName, 
+                    typeof(ServiceLocator), 
+                    typeof(ServiceLocatorGlobal)
+                );
+                container.GetComponent<ServiceLocatorGlobal>().BootstrapOnDemand();
                 return _globalContainer;
             }
         }
@@ -74,25 +44,11 @@ namespace DJM.CoreTools.ServiceLocator
         /// <summary>
         /// Returns the <see cref="ServiceLocator"/> configured for the scene of a MonoBehaviour. Falls back to the global instance.
         /// </summary>
-        public static ServiceLocator ForSceneOf(MonoBehaviour mb) 
+        public static ServiceLocator ForSceneOf(MonoBehaviour mb)
         {
-            var scene = mb.gameObject.scene;
-            
-            if (_sceneContainers.TryGetValue(scene, out var container) && container != mb) return container;
-            
-            _tmpSceneGameObjects.Clear();
-            scene.GetRootGameObjects(_tmpSceneGameObjects);
-
-            foreach (var go in _tmpSceneGameObjects.Where(go => go.GetComponent<ServiceLocatorScene>() != null)) 
-            {
-                if (go.TryGetComponent(out ServiceLocatorScene bootstrapper) && bootstrapper.Container != mb) 
-                {
-                    bootstrapper.BootstrapOnDemand();
-                    return bootstrapper.Container;
-                }
-            }
-
-            return GlobalContainer;
+            return _sceneContainers.TryGetValue(mb.gameObject.scene, out var container) 
+                ? container 
+                : GlobalContainer;
         }
 
         /// <summary>
@@ -103,6 +59,15 @@ namespace DJM.CoreTools.ServiceLocator
         {
             return mb.GetComponentInParent<ServiceLocator>().OrNull() ?? ForSceneOf(mb) ?? GlobalContainer;
         }
+        
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() 
+        {
+            _globalContainer = null;
+            _sceneContainers = new Dictionary<Scene, ServiceLocator>();
+        }
+        
+        
         
         /// <summary>
         /// Registers a service to the ServiceLocator using the service's type.
@@ -137,14 +102,14 @@ namespace DJM.CoreTools.ServiceLocator
         public ServiceLocator Get<T>(out T service) where T : class 
         {
             if (TryGetService(out service)) return this;
-            
-            if (TryGetNextInHierarchy(out var container)) 
+
+            if (!TryGetNextInHierarchy(out var container))
             {
-                container.Get(out service);
-                return this;
+                throw new ArgumentException($"ServiceLocator.Get: Service of type {typeof(T).FullName} not registered");
             }
             
-            throw new ArgumentException($"ServiceLocator.Get: Service of type {typeof(T).FullName} not registered");
+            container.Get(out service);
+            return this;
         }
 
         /// <summary>
@@ -168,15 +133,34 @@ namespace DJM.CoreTools.ServiceLocator
         /// <returns>True if the service retrieval was successful, false otherwise.</returns>
         public bool TryGet<T>(out T service) where T : class 
         {
-            var type = typeof(T);
-            service = null;
-
-            if (TryGetService(type, out service))
-                return true;
-
+            if (TryGetService(typeof(T), out service)) return true;
             return TryGetNextInHierarchy(out var container) && container.TryGet(out service);
         }
+        
+        internal void ConfigureAsGlobal(bool dontDestroyOnLoad) 
+        {
+            if (_globalContainer == this)
+            {
+                LogWarning("Already configured as global", nameof(ConfigureAsGlobal));
+                return;
+            }
+            
+            if (_globalContainer != null) 
+            {
+                LogWarning("Another ServiceLocator is already configured as global", nameof(ConfigureAsGlobal));
+                return;
+            } 
 
+            _globalContainer = this;
+            if (dontDestroyOnLoad) DontDestroyOnLoad(gameObject);
+        }
+
+        internal void ConfigureForScene() 
+        {
+            if (_sceneContainers.TryAdd(gameObject.scene, this)) return;
+            LogWarning("Another ServiceLocator is already configured for this scene", nameof(ConfigureForScene));
+        }
+        
         private bool TryGetService<T>(out T service) where T : class 
         {
             return _services.TryGet(out service);
@@ -198,40 +182,29 @@ namespace DJM.CoreTools.ServiceLocator
             container = transform.parent.OrNull()?.GetComponentInParent<ServiceLocator>().OrNull() ?? ForSceneOf(this);
             return container != null;
         }
-
+        
         private void OnDestroy() 
         {
             if (this == _globalContainer) 
             {
                 _globalContainer = null;
+                return;
             } 
-            else if (_sceneContainers.ContainsValue(this)) 
+            
+            if (_sceneContainers.ContainsValue(this)) 
             {
                 _sceneContainers.Remove(gameObject.scene);
             }
         }
         
-        // https://docs.unity3d.com/ScriptReference/RuntimeInitializeOnLoadMethodAttribute.html
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        private static void ResetStatics() 
+        private void LogWarning(string message, string nameOfMethod = null) 
         {
-            _globalContainer = null;
-            _sceneContainers = new Dictionary<Scene, ServiceLocator>();
-            _tmpSceneGameObjects = new List<GameObject>();
-        }
-
 #if UNITY_EDITOR
-        [MenuItem("GameObject/ServiceLocator/Add Global")]
-        private static void AddGlobal() 
-        {
-            var go = new GameObject(GlobalServiceLocatorName, typeof(ServiceLocatorGlobal));
-        }
-
-        [MenuItem("GameObject/ServiceLocator/Add Scene")]
-        private static void AddScene() 
-        {
-            var go = new GameObject(SceneServiceLocatorName, typeof(ServiceLocatorScene));
-        }
+            var header = string.IsNullOrEmpty(nameOfMethod) 
+                ? nameof(ServiceLocator) 
+                : $"{nameof(ServiceLocator)}.{nameOfMethod}";
+            Debug.LogWarning($"{header}: {message}", this);
 #endif
+        }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace DJM.CoreTools.ServiceLocator 
 {
     [DisallowMultipleComponent, RequireComponent(typeof(ServiceLocator))]
-    public abstract class Bootstrapper : MonoBehaviour 
+    public abstract class ServiceLocatorBootstrapper : MonoBehaviour 
     {
         private ServiceLocator _container;
         private bool _hasBeenBootstrapped;

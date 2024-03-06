@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace DJM.CoreTools.ServiceLocator
 {
-    [AddComponentMenu("ServiceLocator/ServiceLocator Scene")]
-    public class ServiceLocatorScene : Bootstrapper 
+    [AddComponentMenu("ServiceLocator/Scene")]
+    public class ServiceLocatorScene : ServiceLocatorBootstrapper 
     {
         protected override void Bootstrap() 
         {
