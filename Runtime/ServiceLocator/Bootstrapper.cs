@@ -21,24 +21,4 @@ namespace DJM.CoreTools.ServiceLocator
         
         protected abstract void Bootstrap();
     }
-
-    [AddComponentMenu("ServiceLocator/ServiceLocator Global")]
-    public class ServiceLocatorGlobal : Bootstrapper 
-    {
-        [SerializeField] private bool dontDestroyOnLoad = true;
-        
-        protected override void Bootstrap() 
-        {
-            Container.ConfigureAsGlobal(dontDestroyOnLoad);
-        }
-    }
-    
-    [AddComponentMenu("ServiceLocator/ServiceLocator Scene")]
-    public class ServiceLocatorScene : Bootstrapper 
-    {
-        protected override void Bootstrap() 
-        {
-            Container.ConfigureForScene();            
-        }
-    }
 }

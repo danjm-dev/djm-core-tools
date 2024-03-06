@@ -189,7 +189,8 @@ namespace DJM.CoreTools.ServiceLocator
 
         private bool TryGetNextInHierarchy(out ServiceLocator container) 
         {
-            if (this == _globalContainer) {
+            if (this == _globalContainer) 
+            {
                 container = null;
                 return false;
             }
@@ -200,9 +201,12 @@ namespace DJM.CoreTools.ServiceLocator
 
         private void OnDestroy() 
         {
-            if (this == _globalContainer) {
+            if (this == _globalContainer) 
+            {
                 _globalContainer = null;
-            } else if (_sceneContainers.ContainsValue(this)) {
+            } 
+            else if (_sceneContainers.ContainsValue(this)) 
+            {
                 _sceneContainers.Remove(gameObject.scene);
             }
         }
