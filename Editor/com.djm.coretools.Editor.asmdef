@@ -1,5 +1,5 @@
 {
-    "name": "com.djm.core-tools.Editor",
+    "name": "com.djm.coretools.Editor",
     "rootNamespace": "DJM.CoreTools.Editor",
     "references": [],
     "includePlatforms": [
