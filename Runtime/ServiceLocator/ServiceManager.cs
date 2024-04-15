@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DJM.CoreTools.ServiceLocator 
 {
-    public class ServiceManager 
+    internal sealed class ServiceManager 
     {
         private readonly Dictionary<Type, object> _services = new();
         

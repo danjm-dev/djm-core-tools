@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace DJM.CoreTools.ServiceLocator 
 {
-    public class ServiceLocator : MonoBehaviour 
+    public sealed class ServiceLocator : MonoBehaviour 
     {
         private const string GlobalServiceLocatorName = "[ServiceLocator (Global)]";
         
