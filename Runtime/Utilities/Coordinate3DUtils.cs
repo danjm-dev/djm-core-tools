@@ -19,6 +19,28 @@ namespace DJM.CoreTools.Utilities
         }
         
         [BurstCompile]
+        public static void LocalCoordinatesToWorldCoordinates
+        (
+            in int3 localCoordinates, 
+            in int3 origin,
+            out int3 worldCoordinates
+        )
+        {
+            worldCoordinates = localCoordinates + origin;
+        }
+        
+        [BurstCompile]
+        public static void WorldCoordinatesToLocalCoordinates
+        (
+            in int3 worldCoordinates, 
+            in int3 origin,
+            out int3 localCoordinates
+        )
+        {
+            localCoordinates = worldCoordinates - origin;
+        }
+        
+        [BurstCompile]
         public static void CoordinatesToPosition        
         (
             in int3 coordinates, 

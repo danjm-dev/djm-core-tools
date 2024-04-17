@@ -17,6 +17,28 @@ namespace DJM.CoreTools.Utilities
         {
             coordinates = (int2)math.floor(position / unitSize) - origin;
         }
+
+        [BurstCompile]
+        public static void LocalCoordinatesToWorldCoordinates
+        (
+            in int2 localCoordinates, 
+            in int2 origin,
+            out int2 worldCoordinates
+        )
+        {
+            worldCoordinates = localCoordinates + origin;
+        }
+
+        [BurstCompile]
+        public static void WorldCoordinatesToLocalCoordinates
+        (
+            in int2 worldCoordinates, 
+            in int2 origin,
+            out int2 localCoordinates
+        )
+        {
+            localCoordinates = worldCoordinates - origin;
+        }
         
         [BurstCompile]
         public static void CoordinatesToPosition        
