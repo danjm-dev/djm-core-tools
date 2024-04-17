@@ -166,6 +166,33 @@ namespace DJM.CoreTools.Utilities
     public static partial class Coordinate3DUtils
     {
         [BurstCompile]
+        public static bool IsCoordinatesWithinBoundsInclusive(in int3 boundsMin, in int3 boundsMax, in int3 coordinates)
+        {
+            return coordinates >= boundsMin is { x: true, y: true, z: true } 
+                   && coordinates <= boundsMax is { x: true, y: true, z: true };
+        }
+        
+        [BurstCompile]
+        public static bool IsCoordinatesWithinBoundsExclusive(in int3 boundsMin, in int3 boundsMax, in int3 coordinates)
+        {
+            return coordinates > boundsMin is { x: true, y: true, z: true } 
+                   && coordinates < boundsMax is { x: true, y: true, z: true } ;
+        }
+        
+        [BurstCompile]
+        public static bool IsCoordinatesOnBoundsEdge(in int3 boundsMin, in int3 boundsMax, in int3 coordinates)
+        {
+            var minimumOnBounds = coordinates == boundsMin;
+            if (minimumOnBounds.x || minimumOnBounds.y || minimumOnBounds.z) return true;
+            
+            var maximumOnBounds = coordinates == boundsMax;
+            return maximumOnBounds.x || maximumOnBounds.y || maximumOnBounds.z;
+        }
+    }
+    
+    public static partial class Coordinate3DUtils
+    {
+        [BurstCompile]
         public static int IndexToXCoordinate(in int index, int maxXCoordinate)
         {
             return index & maxXCoordinate;

@@ -1,9 +1,11 @@
+using System;
 using Unity.Burst;
 using Unity.Mathematics;
 
 namespace DJM.CoreTools.Utilities
 {
     [BurstCompile]
+    [Obsolete("Use Coordinate2DUtils or Coordinate3DUtils instead", false)]
     public static class CoordinateUtils
     {
         public static readonly int2 North = new (0, 1);
