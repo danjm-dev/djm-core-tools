@@ -190,18 +190,5 @@ namespace DJM.CoreTools.Utilities
         {
             return CoordinatesToIndex(coords.x, coords.y, xCoordinateResolutionLog2);
         }
-        
-        [BurstCompile]
-        public static int GetXCoordinateResolutionLog2(in int2 resolution)
-        {
-            var value = resolution.x;
-            var result = 0;
-            while (value > 1)
-            {
-                value >>= 1;
-                result++;
-            }
-            return result;
-        }
     }
 }
