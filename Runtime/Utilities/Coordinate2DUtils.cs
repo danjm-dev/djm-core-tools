@@ -11,13 +11,147 @@ namespace DJM.CoreTools.Utilities
         (
             in float2 position, 
             in float2 unitSize, 
-            out int2 coordinates, 
-            in int2 origin = default
+            out int2 coordinates
         )
         {
-            coordinates = (int2)math.floor(position / unitSize) - origin;
+            coordinates = (int2)math.floor(position / unitSize);
         }
-
+        
+        [BurstCompile]
+        public static void PositionToCoordinates
+        (
+            in float2 position, 
+            in float2 unitSize, 
+            in int2 origin,
+            out int2 coordinates
+        )
+        {
+            PositionToCoordinates(position, unitSize, out coordinates);
+            coordinates -= origin;
+        }
+        
+        
+        
+        [BurstCompile]
+        public static void CoordinatesToPositionSW
+        (
+            in int2 coordinates, 
+            in float2 unitSize, 
+            out float2 position
+        )
+        {
+            position = coordinates * unitSize;
+        }
+        
+        [BurstCompile]
+        public static void CoordinatesToPositionSW
+        (
+            in int2 coordinates, 
+            in float2 unitSize, 
+            in int2 origin,
+            out float2 position
+        )
+        {
+            CoordinatesToPositionSW(coordinates + origin, unitSize, out position);
+        }
+        
+        [BurstCompile]
+        public static void CoordinatesToPositionSE
+        (
+            in int2 coordinates, 
+            in float2 unitSize, 
+            out float2 position
+        )
+        {
+            CoordinatesToPositionSW(coordinates, unitSize, out position);
+            position += new float2(unitSize.x, 0f);
+        }
+        
+        [BurstCompile]
+        public static void CoordinatesToPositionSE
+        (
+            in int2 coordinates, 
+            in float2 unitSize, 
+            in int2 origin,
+            out float2 position
+        )
+        {
+            CoordinatesToPositionSE(coordinates + origin, unitSize, out position);
+        }
+        
+        [BurstCompile]
+        public static void CoordinatesToPositionNE
+        (
+            in int2 coordinates, 
+            in float2 unitSize, 
+            out float2 position
+        )
+        {
+            CoordinatesToPositionSW(coordinates, unitSize, out position);
+            position += unitSize;
+        }
+        
+        [BurstCompile]
+        public static void CoordinatesToPositionNE
+        (
+            in int2 coordinates, 
+            in float2 unitSize, 
+            in int2 origin,
+            out float2 position
+        )
+        {
+            CoordinatesToPositionNE(coordinates + origin, unitSize, out position);
+        }
+        
+        [BurstCompile]
+        public static void CoordinatesToPositionNW
+        (
+            in int2 coordinates, 
+            in float2 unitSize, 
+            out float2 position
+        )
+        {
+            CoordinatesToPositionSW(coordinates, unitSize, out position);
+            position += new float2(0, unitSize.y);
+        }
+        
+        [BurstCompile]
+        public static void CoordinatesToPositionNW
+        (
+            in int2 coordinates, 
+            in float2 unitSize, 
+            in int2 origin,
+            out float2 position
+        )
+        {
+            CoordinatesToPositionNW(coordinates + origin, unitSize, out position);
+        }
+        
+        [BurstCompile]
+        public static void CoordinatesToPositionCenter
+        (
+            in int2 coordinates, 
+            in float2 unitSize, 
+            out float2 position
+        )
+        {
+            CoordinatesToPositionSW(coordinates, unitSize, out position);
+            position += unitSize * 0.5f;
+        }
+        
+        [BurstCompile]
+        public static void CoordinatesToPositionCenter
+        (
+            in int2 coordinates, 
+            in float2 unitSize, 
+            in int2 origin,
+            out float2 position
+        )
+        {
+            CoordinatesToPositionCenter(coordinates + origin, unitSize, out position);
+        }
+        
+        
         [BurstCompile]
         public static void LocalCoordinatesToWorldCoordinates
         (
@@ -38,163 +172,6 @@ namespace DJM.CoreTools.Utilities
         )
         {
             localCoordinates = worldCoordinates - origin;
-        }
-        
-        [BurstCompile]
-        public static void CoordinatesToPosition        
-        (
-            in int2 coordinates, 
-            in int2 origin,
-            in float2 unitSize, 
-            in float2 offset,
-            out float2 position
-        )
-        {
-            position = (coordinates + origin) * unitSize + offset;
-        }
-        
-        [BurstCompile]
-        public static void CoordinatesToSouthWestPosition
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            out float2 position, 
-            in int2 origin = default
-        )
-        {
-            CoordinatesToPosition(coordinates, origin, unitSize, float2.zero, out position);
-        }
-        
-        [BurstCompile]
-        public static void CoordinatesToSouthEastPosition
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            out float2 position, 
-            in int2 origin = default
-        )
-        {
-            CoordinatesToPosition(coordinates, origin, unitSize, new float2(unitSize.x, 0), out position);
-        }
-        
-        [BurstCompile]
-        public static void CoordinatesToNorthEastPosition
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            out float2 position, 
-            in int2 origin = default
-        )
-        {
-            CoordinatesToPosition(coordinates, origin, unitSize, unitSize, out position);
-        }
-        
-        [BurstCompile]
-        public static void CoordinatesToNorthWestPosition
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            out float2 position, 
-            in int2 origin = default
-        )
-        {
-            CoordinatesToPosition(coordinates, origin, unitSize, new float2(0, unitSize.y), out position);
-        }
-        
-        [BurstCompile]
-        public static void CoordinatesToCenterPosition
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            out float2 position, 
-            in int2 origin = default
-        )
-        {
-            CoordinatesToPosition(coordinates, origin, unitSize, unitSize * 0.5f, out position);
-        }
-    }
-
-    // Coordinates to position overloads returning float3 position
-    public static partial class Coordinate2DUtils
-    {
-        [BurstCompile]
-        public static void CoordinatesToPosition        
-        (
-            in int2 coordinates, 
-            in int2 origin,
-            in float2 unitSize, 
-            in float2 offset,
-            in float y,
-            out float3 position
-        )
-        {
-            CoordinatesToPosition(coordinates, origin, unitSize, offset, out var position2D);
-            position = new float3(position2D.x, y, position2D.y);
-        }
-        
-        [BurstCompile]
-        public static void CoordinatesToSouthWestPosition
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            out float3 position, 
-            in int2 origin = default,
-            in float y = 0f
-        )
-        {
-            CoordinatesToPosition(coordinates, origin, unitSize, float2.zero, y, out position);
-        }
-        
-        [BurstCompile]
-        public static void CoordinatesToSouthEastPosition
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            out float3 position, 
-            in int2 origin = default,
-            in float y = 0f
-        )
-        {
-            CoordinatesToPosition(coordinates, origin, unitSize, new float2(unitSize.x, 0), y, out position);
-        }
-        
-        [BurstCompile]
-        public static void CoordinatesToNorthEastPosition
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            out float3 position, 
-            in int2 origin = default,
-            in float y = 0f
-        )
-        {
-            CoordinatesToPosition(coordinates, origin, unitSize, unitSize, y, out position);
-        }
-        
-        [BurstCompile]
-        public static void CoordinatesToNorthWestPosition
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            out float3 position, 
-            in int2 origin = default,
-            in float y = 0f
-        )
-        {
-            CoordinatesToPosition(coordinates, origin, unitSize, new float2(0, unitSize.y), y, out position);
-        }
-        
-        [BurstCompile]
-        public static void CoordinatesToCenterPosition
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            out float3 position, 
-            in int2 origin = default,
-            in float y = 0f
-        )
-        {
-            CoordinatesToPosition(coordinates, origin, unitSize, unitSize * 0.5f, y, out position);
         }
     }
 
@@ -265,6 +242,19 @@ namespace DJM.CoreTools.Utilities
         public static int CoordinatesToIndex(in int2 coords, in int xCoordinateResolutionLog2)
         {
             return CoordinatesToIndex(coords.x, coords.y, xCoordinateResolutionLog2);
+        }
+        
+        [BurstCompile]
+        public static int GetXCoordinateResolutionLog2(int2 resolution)
+        {
+            var value = resolution.x;
+            var result = 0;
+            while (value > 1)
+            {
+                value >>= 1;
+                result++;
+            }
+            return result;
         }
     }
 }
