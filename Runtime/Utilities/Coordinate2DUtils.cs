@@ -18,21 +18,6 @@ namespace DJM.CoreTools.Utilities
         }
         
         [BurstCompile]
-        public static void PositionToCoordinates
-        (
-            in float2 position, 
-            in float2 unitSize, 
-            in int2 origin,
-            out int2 coordinates
-        )
-        {
-            PositionToCoordinates(position, unitSize, out coordinates);
-            coordinates -= origin;
-        }
-        
-        
-        
-        [BurstCompile]
         public static void CoordinatesToPositionSW
         (
             in int2 coordinates, 
@@ -41,18 +26,6 @@ namespace DJM.CoreTools.Utilities
         )
         {
             position = coordinates * unitSize;
-        }
-        
-        [BurstCompile]
-        public static void CoordinatesToPositionSW
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            in int2 origin,
-            out float2 position
-        )
-        {
-            CoordinatesToPositionSW(coordinates + origin, unitSize, out position);
         }
         
         [BurstCompile]
@@ -68,18 +41,6 @@ namespace DJM.CoreTools.Utilities
         }
         
         [BurstCompile]
-        public static void CoordinatesToPositionSE
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            in int2 origin,
-            out float2 position
-        )
-        {
-            CoordinatesToPositionSE(coordinates + origin, unitSize, out position);
-        }
-        
-        [BurstCompile]
         public static void CoordinatesToPositionNE
         (
             in int2 coordinates, 
@@ -89,18 +50,6 @@ namespace DJM.CoreTools.Utilities
         {
             CoordinatesToPositionSW(coordinates, unitSize, out position);
             position += unitSize;
-        }
-        
-        [BurstCompile]
-        public static void CoordinatesToPositionNE
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            in int2 origin,
-            out float2 position
-        )
-        {
-            CoordinatesToPositionNE(coordinates + origin, unitSize, out position);
         }
         
         [BurstCompile]
@@ -116,18 +65,6 @@ namespace DJM.CoreTools.Utilities
         }
         
         [BurstCompile]
-        public static void CoordinatesToPositionNW
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            in int2 origin,
-            out float2 position
-        )
-        {
-            CoordinatesToPositionNW(coordinates + origin, unitSize, out position);
-        }
-        
-        [BurstCompile]
         public static void CoordinatesToPositionCenter
         (
             in int2 coordinates, 
@@ -138,20 +75,10 @@ namespace DJM.CoreTools.Utilities
             CoordinatesToPositionSW(coordinates, unitSize, out position);
             position += unitSize * 0.5f;
         }
-        
-        [BurstCompile]
-        public static void CoordinatesToPositionCenter
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            in int2 origin,
-            out float2 position
-        )
-        {
-            CoordinatesToPositionCenter(coordinates + origin, unitSize, out position);
-        }
-        
-        
+    }
+
+    public static partial class Coordinate2DUtils
+    {
         [BurstCompile]
         public static void LocalCoordinatesToWorldCoordinates
         (
@@ -161,6 +88,16 @@ namespace DJM.CoreTools.Utilities
         )
         {
             worldCoordinates = localCoordinates + origin;
+        }
+        
+        [BurstCompile]
+        public static void LocalCoordinatesToWorldCoordinates
+        (
+            ref int2 coordinates, 
+            in int2 origin
+        )
+        {
+            coordinates += origin;
         }
 
         [BurstCompile]
@@ -172,6 +109,16 @@ namespace DJM.CoreTools.Utilities
         )
         {
             localCoordinates = worldCoordinates - origin;
+        }
+        
+        [BurstCompile]
+        public static void WorldCoordinatesToLocalCoordinates
+        (
+            ref int2 coordinates, 
+            in int2 origin
+        )
+        {
+            coordinates -= origin;
         }
     }
 
