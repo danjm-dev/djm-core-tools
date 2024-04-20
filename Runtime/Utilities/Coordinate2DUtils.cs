@@ -245,7 +245,7 @@ namespace DJM.CoreTools.Utilities
         }
         
         [BurstCompile]
-        public static int GetXCoordinateResolutionLog2(int2 resolution)
+        public static int GetXCoordinateResolutionLog2(in int2 resolution)
         {
             var value = resolution.x;
             var result = 0;
