@@ -15,7 +15,6 @@ namespace DJM.CoreTools.Utilities
         )
         {
             coordinates = (int2)math.floor(position / unitSize);
-            //coords = (int3)math.floor(position >> (int3)math.log2(unitSize));
         }
         
         [BurstCompile]
@@ -27,7 +26,6 @@ namespace DJM.CoreTools.Utilities
         )
         {
             position = coordinates * unitSize;
-            //position = coords << (int3)math.log2(unitSize);
         }
         
         [BurstCompile]
