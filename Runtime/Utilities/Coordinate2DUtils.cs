@@ -18,17 +18,6 @@ namespace DJM.CoreTools.Utilities
         }
         
         [BurstCompile]
-        public static void CoordinatesToPositionSW
-        (
-            in int2 coordinates, 
-            in float2 unitSize, 
-            out float2 position
-        )
-        {
-            position = coordinates * unitSize;
-        }
-        
-        [BurstCompile]
         public static void GetCoordinateScaleFactor(in float2 fromUnitSize, in float2 toUnitSize, out float2 scaleFactor)
         {
             scaleFactor = fromUnitSize / toUnitSize;
@@ -56,6 +45,17 @@ namespace DJM.CoreTools.Utilities
         {
             GetCoordinateScaleFactor(fromUnitSize, toUnitSize, out var scaleFactor);
             ScaleCoordinates(coordinates, scaleFactor, out scaledCoordinates);
+        }
+        
+        [BurstCompile]
+        public static void CoordinatesToPositionSW
+        (
+            in int2 coordinates, 
+            in float2 unitSize, 
+            out float2 position
+        )
+        {
+            position = coordinates * unitSize;
         }
         
         [BurstCompile]
@@ -197,15 +197,15 @@ namespace DJM.CoreTools.Utilities
         public static void IndexToCoordinates
         (
             in int index, 
-            in int2 maxCoords, 
+            in int2 maxCoordinates, 
             in int xCoordinateResolutionLog2, 
-            out int2 coords
+            out int2 coordinates
         )
         {
-            coords = new int2
+            coordinates = new int2
             (
-                IndexToXCoordinate(index, maxCoords.x), 
-                IndexToYCoordinate(index, maxCoords.y, xCoordinateResolutionLog2)
+                IndexToXCoordinate(index, maxCoordinates.x), 
+                IndexToYCoordinate(index, maxCoordinates.y, xCoordinateResolutionLog2)
             );
         }
         
@@ -216,9 +216,9 @@ namespace DJM.CoreTools.Utilities
         }
         
         [BurstCompile]
-        public static int CoordinatesToIndex(in int2 coords, in int xCoordinateResolutionLog2)
+        public static int CoordinatesToIndex(in int2 coordinates, in int xCoordinateResolutionLog2)
         {
-            return CoordinatesToIndex(coords.x, coords.y, xCoordinateResolutionLog2);
+            return CoordinatesToIndex(coordinates.x, coordinates.y, xCoordinateResolutionLog2);
         }
     }
 }
