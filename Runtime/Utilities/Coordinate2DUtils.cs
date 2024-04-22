@@ -31,6 +31,23 @@ namespace DJM.CoreTools.Utilities
         }
         
         [BurstCompile]
+        public static void GetCoordinateScaleFactor(in float2 fromUnitSize, in float2 toUnitSize, out float2 scaleFactor)
+        {
+            scaleFactor = fromUnitSize / toUnitSize;
+        }
+        
+        [BurstCompile]
+        public static void ScaleCoordinates
+        (
+            in int2 coordinates, 
+            in float2 scaleFactor,
+            out int2 scaledCoordinates
+        )
+        {
+            scaledCoordinates = (int2)math.floor(coordinates * scaleFactor);
+        }
+        
+        [BurstCompile]
         public static void ScaleCoordinates
         (
             in int2 coordinates, 
@@ -39,7 +56,8 @@ namespace DJM.CoreTools.Utilities
             out int2 scaledCoordinates
         )
         {
-            scaledCoordinates = (int2)math.floor(coordinates * (toUnitSize / fromUnitSize));
+            GetCoordinateScaleFactor(fromUnitSize, toUnitSize, out var scaleFactor);
+            ScaleCoordinates(coordinates, scaleFactor, out scaledCoordinates);
         }
         
         [BurstCompile]
