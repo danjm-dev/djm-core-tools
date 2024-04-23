@@ -12,7 +12,7 @@ namespace DJM.CoreTools.Utilities
         /// <summary>
         /// Converts a 2D position to coordinates.
         /// </summary>
-        /// <param name="position">The 2D position to convert.</param>
+        /// <param name="position">The position to convert.</param>
         /// <param name="unitSize">The size of a unit.</param>
         /// <param name="coordinates">The resulting 2D coordinates.</param>
         [BurstCompile]
@@ -29,7 +29,7 @@ namespace DJM.CoreTools.Utilities
         /// <summary>
         /// Converts a 3D position to coordinates.
         /// </summary>
-        /// <param name="position">The 3D position to convert.</param>
+        /// <param name="position">The position to convert.</param>
         /// <param name="unitSize">The size of a unit.</param>
         /// <param name="coordinates">The resulting 3D coordinates.</param>
         [BurstCompile]
@@ -46,7 +46,7 @@ namespace DJM.CoreTools.Utilities
         /// <summary>
         /// Converts 2D coordinates to a position.
         /// </summary>
-        /// <param name="coordinates">The 2D coordinates to convert.</param>
+        /// <param name="coordinates">The coordinates to convert.</param>
         /// <param name="unitSize">The size of a unit.</param>
         /// <param name="position">The resulting 2D position.</param>
         [BurstCompile]
@@ -63,7 +63,7 @@ namespace DJM.CoreTools.Utilities
         /// <summary>
         /// Converts 3D coordinates to a position.
         /// </summary>
-        /// <param name="coordinates">The 3D coordinates to convert.</param>
+        /// <param name="coordinates">The coordinates to convert.</param>
         /// <param name="unitSize">The size of a unit.</param>
         /// <param name="position">The resulting 3D position.</param>
         [BurstCompile]
@@ -78,10 +78,48 @@ namespace DJM.CoreTools.Utilities
         }
         
         /// <summary>
+        /// Converts 2D coordinates to a position with a offset.
+        /// </summary>
+        /// <param name="coordinates">The coordinates to convert.</param>
+        /// <param name="unitSize">The size of a unit.</param>
+        /// <param name="offset">The amount to offset the position by.</param>
+        /// <param name="position">The resulting 2D position.</param>
+        [BurstCompile]
+        public static void CoordinatesToPosition
+        (
+            in int2 coordinates, 
+            in float2 unitSize, 
+            in float2 offset,
+            out float2 position
+        )
+        {
+            position = coordinates * unitSize + offset;
+        }
+        
+        /// <summary>
+        /// Converts 3D coordinates to a position.
+        /// </summary>
+        /// <param name="coordinates">The coordinates to convert.</param>
+        /// <param name="unitSize">The size of a unit.</param>
+        /// /// <param name="offset">The amount to offset the position by.</param>
+        /// <param name="position">The resulting 3D position.</param>
+        [BurstCompile]
+        public static void CoordinatesToPosition
+        (
+            in int3 coordinates, 
+            in float3 unitSize, 
+            in float3 offset,
+            out float3 position
+        )
+        {
+            position = coordinates * unitSize + offset;
+        }
+        
+        /// <summary>
         /// Gets the scale factor for 2D coordinates scale conversion.
         /// </summary>
         /// <remarks>
-        /// The value returned from this is intended to be used in <see cref="ScaleCoordinates"/>.
+        /// The value returned from this is intended to be used in <see cref="o:ScaleCoordinates"/>.
         /// </remarks>
         /// <param name="fromUnitSize">The original unit size.</param>
         /// <param name="toUnitSize">The target unit size.</param>
@@ -96,7 +134,7 @@ namespace DJM.CoreTools.Utilities
         /// Gets the scale factor for 3D coordinates scale conversion.
         /// </summary>
         /// <remarks>
-        /// The value returned from this is intended to be used in the <see cref="ScaleCoordinates"/>.
+        /// The value returned from this is intended to be used in the <see cref="o:ScaleCoordinates"/>.
         /// </remarks>
         /// <param name="fromUnitSize">The original unit size.</param>
         /// <param name="toUnitSize">The target unit size.</param>
@@ -114,7 +152,7 @@ namespace DJM.CoreTools.Utilities
         /// This is useful for finding equivalent coordinates of a different size, e.g. chunk coordinates of tile coordinates.
         /// </remarks>
         /// <param name="coordinates">Coordinates to be scaled</param>
-        /// <param name="scaleFactor">Factor to scale the coordinates by. Can be calculated from <see cref="GetCoordinateScaleFactor"/>.></param>
+        /// <param name="scaleFactor">Factor to scale the coordinates by. Can be calculated from <see cref="o:GetCoordinateScaleFactor"/>.></param>
         /// <param name="scaledCoordinates">Resulting scaled coordinates.</param>
         [BurstCompile]
         public static void ScaleCoordinates
@@ -134,7 +172,7 @@ namespace DJM.CoreTools.Utilities
         /// This is useful for finding equivalent coordinates of a different size, e.g. chunk coordinates of tile coordinates.
         /// </remarks>
         /// <param name="coordinates">Coordinates to be scaled</param>
-        /// <param name="scaleFactor">Factor to scale the coordinates by. Can be calculated from <see cref="GetCoordinateScaleFactor"/>.></param>
+        /// <param name="scaleFactor">Factor to scale the coordinates by. Can be calculated from <see cref="o:GetCoordinateScaleFactor"/>.></param>
         /// <param name="scaledCoordinates">Resulting scaled coordinates.</param>
         [BurstCompile]
         public static void ScaleCoordinates
@@ -328,7 +366,7 @@ namespace DJM.CoreTools.Utilities
         /// To use this overload each axis of grid resolution must be a power of 2. e.g. 2, 4, 8, 16, 32 etc.
         /// </remarks>>
         /// <param name="index">The index to convert.</param>
-        /// <param name="indexingData">Indexing data used in bitwise operations. Can be generated from <see cref="GetBitwiseIndexingData"/>.></param>
+        /// <param name="indexingData">Indexing data used in bitwise operations. Can be generated from <see cref="o:GetBitwiseIndexingData"/>.></param>
         /// <param name="maxCoordinates">The max coordinates of the grid, which is one less than the grid resolution on each axis.</param>
         /// <param name="coordinates">The resulting coordinates.</param>
         [BurstCompile]
@@ -371,7 +409,7 @@ namespace DJM.CoreTools.Utilities
         /// To use this overload each axis of grid resolution must be a power of 2. e.g. 2, 4, 8, 16, 32 etc.
         /// </remarks>>
         /// <param name="index">The index to convert.</param>
-        /// <param name="indexingData">Indexing data used in bitwise operations. Can be generated from <see cref="GetBitwiseIndexingData"/>.></param>
+        /// <param name="indexingData">Indexing data used in bitwise operations. Can be generated from <see cref="o:GetBitwiseIndexingData"/>.></param>
         /// <param name="maxCoordinates">The max coordinates of the grid, which is one less than the grid resolution on each axis.</param>
         /// <param name="coordinates">The resulting coordinates.</param>
         [BurstCompile]
@@ -410,7 +448,7 @@ namespace DJM.CoreTools.Utilities
         /// To use this overload each axis of grid resolution must be a power of 2. e.g. 2, 4, 8, 16, 32 etc.
         /// </remarks>>
         /// <param name="coordinates">The coordinates to convert.</param>
-        /// <param name="indexingData">Indexing data used in bitwise operations. Can be generated from <see cref="GetBitwiseIndexingData"/>.></param>
+        /// <param name="indexingData">Indexing data used in bitwise operations. Can be generated from <see cref="o:GetBitwiseIndexingData"/>.></param>
         /// <returns>The resulting Index</returns>
         [BurstCompile]
         public static int CoordinatesToIndex(in int2 coordinates, in BitwiseIndexingData2D indexingData)
@@ -437,7 +475,7 @@ namespace DJM.CoreTools.Utilities
         /// To use this overload each axis of grid resolution must be a power of 2. e.g. 2, 4, 8, 16, 32 etc.
         /// </remarks>>
         /// <param name="coordinates">The coordinates to convert.</param>
-        /// <param name="indexingData">Indexing data used in bitwise operations. Can be generated from <see cref="GetBitwiseIndexingData"/>.></param>
+        /// <param name="indexingData">Indexing data used in bitwise operations. Can be generated from <see cref="o:GetBitwiseIndexingData"/>.></param>
         /// <returns>The resulting Index</returns>
         [BurstCompile]
         public static int CoordinatesToIndex(in int3 coordinates, in BitwiseIndexingData3D indexingData)
