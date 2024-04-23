@@ -1,9 +1,11 @@
-﻿using Unity.Burst;
+﻿using System;
+using Unity.Burst;
 using Unity.Mathematics;
 
 namespace DJM.CoreTools.Utilities
 {
     [BurstCompile]
+    [Obsolete]
     public static class CoordinatePositionUtils
     {
         private static readonly float2 CenterOffset = new (0.5f, 0.5f);

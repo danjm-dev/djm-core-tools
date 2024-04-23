@@ -1,9 +1,11 @@
-﻿using Unity.Burst;
+﻿using System;
+using Unity.Burst;
 using Unity.Mathematics;
 
 namespace DJM.CoreTools.Utilities
 {
     [BurstCompile]
+    [Obsolete]
     public static partial class Coordinate3DUtils
     {
         [BurstCompile]
