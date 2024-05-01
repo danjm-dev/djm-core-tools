@@ -254,6 +254,62 @@ namespace DJM.CoreTools.Utilities
         }
         
         /// <summary>
+        /// Ensures that the minimum bounds are less than the maximum bounds.
+        /// </summary>
+        /// <param name="boundsMin">Minimum bounds.</param>
+        /// <param name="boundsMax">Maximum bounds.</param>
+        /// <param name="validatedBoundsMin">Validated minimum bounds.</param>
+        /// <param name="validatedBoundsMax">Validated maximum bounds.</param>
+        [BurstCompile]
+        public static void EnsureBoundsValidity
+        (
+            in int2 boundsMin, 
+            in int2 boundsMax, 
+            out int2 validatedBoundsMin, 
+            out int2 validatedBoundsMax
+        )
+        {
+            validatedBoundsMin = math.min(boundsMin, boundsMax);
+            validatedBoundsMax = math.max(boundsMin, boundsMax);
+        }
+        
+        /// <summary>
+        /// Ensures that the minimum bounds are less than the maximum bounds.
+        /// </summary>
+        /// <param name="boundsMin">Minimum bounds.</param>
+        /// <param name="boundsMax">Maximum bounds.</param>
+        [BurstCompile]
+        public static void EnsureBoundsValidity(ref int2 boundsMin, ref int2 boundsMax)
+        {
+            var min = math.min(boundsMin, boundsMax);
+            var max = math.max(boundsMin, boundsMax);
+            boundsMin = min;
+            boundsMax = max;
+        }
+        
+        /// <summary>
+        /// Gets the positions of the minimum and maximum bounds.
+        /// </summary>
+        /// <param name="boundsMin">Minimum bounds.</param>
+        /// <param name="boundsMax">Maximum bounds.</param>
+        /// <param name="unitSize">Coordinate unit size.</param>
+        /// <param name="boundsMinPosition">Minimum bounds position.</param>
+        /// <param name="boundsMaxPosition">Maximum bounds position.</param>
+        [BurstCompile]
+        public static void GetBoundsPositions
+        (
+            in int2 boundsMin, 
+            in int2 boundsMax, 
+            in float2 unitSize,
+            out float2 boundsMinPosition, 
+            out float2 boundsMaxPosition
+        )
+        {
+            CoordinatesToPosition(boundsMin, unitSize, out boundsMinPosition);
+            CoordinatesToPosition(boundsMax, unitSize, unitSize, out boundsMaxPosition);
+        }
+        
+        /// <summary>
         /// Checks if 2D coordinates are within given bounds, including bounds edge coordinates.
         /// </summary>
         /// <param name="coordinates">Coordinates to check.</param>
