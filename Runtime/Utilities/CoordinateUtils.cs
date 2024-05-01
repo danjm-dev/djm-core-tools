@@ -308,6 +308,18 @@ namespace DJM.CoreTools.Utilities
             CoordinatesToPosition(boundsMin, unitSize, out boundsMinPosition);
             CoordinatesToPosition(boundsMax, unitSize, unitSize, out boundsMaxPosition);
         }
+
+        /// <summary>
+        /// Gets the resolution of the grid made by the bounds.
+        /// </summary>
+        /// <param name="boundsMin">Minimum bounds.</param>
+        /// <param name="boundsMax">Maximum bounds.</param>
+        /// <param name="boundsResolution">Bounds grid resolution.</param>
+        [BurstCompile]
+        public static void GetBoundsResolution(in int2 boundsMin, in int2 boundsMax, out int2 boundsResolution)
+        {
+            boundsResolution = boundsMax - boundsMin + 1;
+        }
         
         /// <summary>
         /// Checks if 2D coordinates are within given bounds, including bounds edge coordinates.
