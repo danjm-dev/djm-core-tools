@@ -4,22 +4,15 @@ namespace DJM.CoreTools.Utilities
 {
     public static class ColorUtils
     {
-        public static Color[] GenerateContrastingColors(int count)
+        public static void GenerateContrastingColors(Color[] colors, float saturation = 0.7f, float brightness = 0.6f)
         {
-            var colors = new Color[count];
+            var hueIncrement = 1.0f / colors.Length;
 
-            var hueIncrement = 1.0f / count;
-
-            for (var i = 0; i < count; i++)
+            for (var i = 0; i < colors.Length; i++)
             {
                 var hue = i * hueIncrement;
-                var saturation = 0.7f; // You can adjust saturation and lightness based on your preference
-                var lightness = 0.6f;
-
-                colors[i] = Color.HSVToRGB(hue, saturation, lightness);
+                colors[i] = Color.HSVToRGB(hue, saturation, brightness);
             }
-
-            return colors;
         }
     }
 }

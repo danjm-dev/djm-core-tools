@@ -115,7 +115,7 @@ namespace DJM.CoreTools.Extensions
         ///     Resets the GameObject's transform's position, rotation, and scale to their default values.
         /// </summary>
         /// <param name="gameObject">GameObject whose transformation is to be reset.</param>
-        public static void ResetTransformation(this GameObject gameObject)
+        public static void ResetTransform(this GameObject gameObject)
         {
             gameObject.transform.Reset();
         }

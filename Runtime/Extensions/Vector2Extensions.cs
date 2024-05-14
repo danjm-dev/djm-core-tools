@@ -1,25 +1,10 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics;
+using UnityEngine;
 
 namespace DJM.CoreTools.Extensions
 {
     public static class Vector2Extensions
     {
-        /// <summary>
-        /// Adds to any x y values of a Vector2
-        /// </summary>
-        public static Vector2 Add(this Vector2 vector2, float x = 0, float y = 0)
-        {
-            return new Vector2(vector2.x + x, vector2.y + y);
-        }
-
-        /// <summary>
-        /// Sets any x y values of a Vector2
-        /// </summary>
-        public static Vector2 With(this Vector2 vector2, float? x = null, float? y = null)
-        {
-            return new Vector2(x ?? vector2.x, y ?? vector2.y);
-        }
-
         /// <summary>
         /// Returns a Boolean indicating whether the current Vector2 is in a given range from another Vector2
         /// </summary>
@@ -32,9 +17,14 @@ namespace DJM.CoreTools.Extensions
             return (current - target).sqrMagnitude <= range * range;
         }
 
-        public static Vector3 X0Y(this Vector2 current)
+        public static Vector3 X0Y(this Vector2 current, float y = 0f)
         {
-            return new Vector3(current.x, 0f, current.y);
+            return new Vector3(current.x, y, current.y);
+        }
+        
+        public static Vector3 XY0(this Vector2 current, float z = 0f)
+        {
+            return new Vector3(current.x, current.y, z);
         }
     }
 }
