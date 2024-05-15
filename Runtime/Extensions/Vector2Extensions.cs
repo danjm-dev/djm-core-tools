@@ -15,10 +15,10 @@ namespace DJM.CoreTools.Extensions
         
         
         [Pure, MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float3 X0YFloat(this Vector2 current, float y = 0f) => new(current.x, y, current.y);
+        public static float3 X0YAsFloat(this Vector2 current, float y = 0f) => new(current.x, y, current.y);
         
         [Pure, MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float3 XY0Float(this Vector2 current, float z = 0f) => new(current.x, current.y, z);
+        public static float3 XY0AsFloat(this Vector2 current, float z = 0f) => new(current.x, current.y, z);
         
         
         [Pure, MethodImpl(MethodImplOptions.AggressiveInlining)]
