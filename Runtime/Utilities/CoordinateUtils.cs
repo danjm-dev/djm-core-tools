@@ -552,6 +552,65 @@ namespace DJM.CoreTools.Utilities
         }
         
         /// <summary>
+        /// Checks if a 2D resolution is valid for bitwise indexing. To be valid each axis must be a power of 2.
+        /// </summary>
+        /// <param name="resolution">The resolution to check.</param>
+        /// <returns>True if the resolution is valid.</returns>
+        [BurstCompile]
+        public static bool IsResolutionValidForBitwiseIndexing(in int2 resolution)
+        {
+            var valid = math.ispow2(resolution);
+            return valid is { x: true, y: true };
+        }
+        
+        /// <summary>
+        /// Checks if a 3D resolution is valid for bitwise indexing. To be valid each axis must be a power of 2.
+        /// </summary>
+        /// <param name="resolution">The resolution to check.</param>
+        /// <returns>True if the resolution is valid.</returns>
+        [BurstCompile]
+        public static bool IsResolutionValidForBitwiseIndexing(in int3 resolution)
+        {
+            var valid = math.ispow2(resolution);
+            return valid is { x: true, y: true, z: true };
+        }
+        
+        /// <summary>
+        /// Creates a valid 2D resolution for bitwise indexing from an input resolution.
+        /// The result will be the same size or larger than the input.
+        /// </summary>
+        /// <param name="resolution">The input resolution.</param>
+        /// <param name="validResolution">The validated resolution.</param>
+        [BurstCompile]
+        public static void GetValidBitwiseIndexingResolution(in int2 resolution, out int2 validResolution)
+        {
+            validResolution = resolution;
+            
+            if(IsResolutionValidForBitwiseIndexing(resolution)) return;
+            
+            validResolution.x = (int) math.pow(2, math.ceillog2(resolution.x));
+            validResolution.y = (int) math.pow(2, math.ceillog2(resolution.y));
+        }
+        
+        /// <summary>
+        /// Creates a valid 3D resolution for bitwise indexing from an input resolution.
+        /// The result will be the same size or larger than the input.
+        /// </summary>
+        /// <param name="resolution">The input resolution.</param>
+        /// <param name="validResolution">The validated resolution.</param>
+        [BurstCompile]
+        public static void GetValidBitwiseIndexingResolution(in int3 resolution, out int3 validResolution)
+        {
+            validResolution = resolution;
+            
+            if(IsResolutionValidForBitwiseIndexing(resolution)) return;
+            
+            validResolution.x = (int) math.pow(2, math.ceillog2(resolution.x));
+            validResolution.y = (int) math.pow(2, math.ceillog2(resolution.y));
+            validResolution.z = (int) math.pow(2, math.ceillog2(resolution.z));
+        }
+        
+        /// <summary>
         /// Create 2D bitwise indexing data.
         /// </summary>
         /// <param name="resolution">The resolution of the grid.</param>
