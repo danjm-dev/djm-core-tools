@@ -113,6 +113,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 - Service Locator implementation based on [Unity-Service-Locator](https://github.com/adammyhre/Unity-Service-Locator) on by [adammyhre](https://github.com/adammyhre).
 - Some extensions based on [Unity-Utils](https://github.com/adammyhre/Unity-Utils) by [adammyhre](https://github.com/adammyhre).
 - Priority Queue port from [PriorityQueue](https://github.com/FyiurAmron/PriorityQueue) by [FyiurAmron](https://github.com/FyiurAmron).
+- ConfigurableJointExtensions from [configurablejointextensions](https://gist.github.com/mstevenson/7b85893e8caf5ca034e6#file-configurablejointextensions-cs) by [mstevenson](https://github.com/mstevenson).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

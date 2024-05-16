@@ -6,6 +6,9 @@ namespace DJM.CoreTools.Utilities
     [BurstCompile]
     public static class MathUtils
     {
+        public const float PI2 = math.PI * 2f;
+        public const double PI2_DBL = math.PI_DBL * 2d;
+        
         [BurstCompile]
         public static float MinkowskiDistance(in float2 point1, in float2 point2, in float p)
         {
@@ -29,12 +32,6 @@ namespace DJM.CoreTools.Utilities
                 direction.x * cosTheta - direction.y * sinTheta,
                 direction.x * sinTheta + direction.y * cosTheta
             );
-        }
-        
-        [BurstCompile]
-        public static float GetDirectionOffsetAngleInRadians(in float2 directionA, in float2 directionB)
-        {
-            return math.acos(math.dot(directionA, directionB));
         }
     }
 }
