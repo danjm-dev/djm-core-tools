@@ -1,11 +1,16 @@
 ﻿using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace DJM.CoreTools.Extensions
 {
     public static class Vector3Extensions
     {
+        [Pure, MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float3 AsFloat(this Vector3 v) => new(v.x, v.y, v.z);
+        
+        
         [Pure, MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 XX(this Vector3 v) => new(v.x, v.x);
         

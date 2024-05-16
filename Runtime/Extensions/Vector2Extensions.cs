@@ -8,6 +8,10 @@ namespace DJM.CoreTools.Extensions
     public static class Vector2Extensions
     {
         [Pure, MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float2 AsFloat(this Vector2 v) => new(v.x, v.y);
+        
+        
+        [Pure, MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 X0Y(this Vector2 current, float y = 0f) => new(current.x, y, current.y);
         
         [Pure, MethodImpl(MethodImplOptions.AggressiveInlining)]
