@@ -13,7 +13,7 @@ namespace DJM.CoreTools.ServiceLocator
         private static ServiceLocator _globalContainer;
         private static Dictionary<Scene, ServiceLocator> _sceneContainers;
 
-        private readonly ServiceManager _services = new ();
+        private readonly ServiceManager _services = new();
         
         /// <summary>
         /// Gets the global ServiceLocator instance. Creates new if none exists.
@@ -94,21 +94,21 @@ namespace DJM.CoreTools.ServiceLocator
         }
         
         /// <summary>
-        /// Gets a service of a specific type. If no service of the required type is found, an error is thrown.
+        /// Resolves a service of a specific type. If no service of the required type is found, an error is thrown.
         /// </summary>
         /// <param name="service">Service of type T to get.</param>  
         /// <typeparam name="T">Class type of the service to be retrieved.</typeparam>
         /// <returns>The ServiceLocator instance after attempting to retrieve the service.</returns>
-        public ServiceLocator Get<T>(out T service) where T : class 
+        public ServiceLocator Resolve<T>(out T service) where T : class 
         {
-            if (TryGetService(out service)) return this;
+            if (_services.TryGet(out service)) return this;
 
             if (!TryGetNextInHierarchy(out var container))
             {
                 throw new ArgumentException($"ServiceLocator.Get: Service of type {typeof(T).FullName} not registered");
             }
             
-            container.Get(out service);
+            container.Resolve(out service);
             return this;
         }
 
@@ -117,24 +117,24 @@ namespace DJM.CoreTools.ServiceLocator
         /// </summary>
         /// <typeparam name="T">Class type of the service to be retrieved.</typeparam>
         /// <returns>Instance of the service of type T.</returns>
-        public T Get<T>() where T : class
+        public T Resolve<T>() where T : class
         {
-            if (TryGetService(typeof(T), out T service)) return service;
-            if (TryGetNextInHierarchy(out var container)) return container.Get<T>();
+            if (_services.TryGet(out T service)) return service;
+            if (TryGetNextInHierarchy(out var container)) return container.Resolve<T>();
 
             throw new ArgumentException($"Could not resolve type '{typeof(T).FullName}'.");
         }
         
         /// <summary>
-        /// Tries to get a service of a specific type. Returns whether or not the process is successful.
+        /// Tries to resolve a service of a specific type. Returns whether or not the process is successful.
         /// </summary>
         /// <param name="service">Service of type T to get.</param>  
         /// <typeparam name="T">Class type of the service to be retrieved.</typeparam>
         /// <returns>True if the service retrieval was successful, false otherwise.</returns>
-        public bool TryGet<T>(out T service) where T : class 
+        public bool TryResolve<T>(out T service) where T : class 
         {
-            if (TryGetService(typeof(T), out service)) return true;
-            return TryGetNextInHierarchy(out var container) && container.TryGet(out service);
+            if (_services.TryGet(out service)) return true;
+            return TryGetNextInHierarchy(out var container) && container.TryResolve(out service);
         }
         
         internal void ConfigureAsGlobal(bool dontDestroyOnLoad) 
@@ -159,16 +159,6 @@ namespace DJM.CoreTools.ServiceLocator
         {
             if (_sceneContainers.TryAdd(gameObject.scene, this)) return;
             LogWarning("Another ServiceLocator is already configured for this scene", nameof(ConfigureForScene));
-        }
-        
-        private bool TryGetService<T>(out T service) where T : class 
-        {
-            return _services.TryGet(out service);
-        }
-
-        private bool TryGetService<T>(Type type, out T service) where T : class 
-        {
-            return _services.TryGet(out service);
         }
 
         private bool TryGetNextInHierarchy(out ServiceLocator container) 
