@@ -34,6 +34,9 @@ namespace DJM.CoreTools.Editor.SceneTools
             private static void ShowSceneMenu()
             {
                 LoadedSceneNameBuffer.Clear();
+                
+                if(EditorApplication.isPlaying) return;
+                
                 for (var i = 0; i < SceneManager.sceneCount; i++)
                 {
                     LoadedSceneNameBuffer.Add(SceneManager.GetSceneAt(i).name);

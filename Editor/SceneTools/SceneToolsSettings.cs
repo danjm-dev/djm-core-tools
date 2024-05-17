@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DJM.CoreTools.Editor.SceneTools
 {
-    [FilePath(DJM.EditorResourcesPath + nameof(SceneToolsSettings), FilePathAttribute.Location.ProjectFolder)]
+    [FilePath(AssemblyUtils.EditorResourcesPath + nameof(SceneToolsSettings), FilePathAttribute.Location.ProjectFolder)]
     internal sealed class SceneToolsSettings : ScriptableSingleton<SceneToolsSettings>
     {
         [SerializeField] private bool openSceneZeroOnExitingEditMode = false;

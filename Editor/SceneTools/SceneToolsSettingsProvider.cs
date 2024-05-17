@@ -7,7 +7,7 @@ namespace DJM.CoreTools.Editor.SceneTools
     internal sealed class SceneToolsSettingsProvider : SettingsProvider
     {
         public const string Name = "Scene Tools";
-        public const string Path = DJM.PathBase + Name;
+        public const string Path = AssemblyUtils.PathBase + Name;
         public const string SettingsLocation = "Project Settings/" + Path;
         
         public static bool OpenSceneZeroOnExitingEditMode => SceneToolsSettings.OpenSceneZeroOnExitingEditMode;
