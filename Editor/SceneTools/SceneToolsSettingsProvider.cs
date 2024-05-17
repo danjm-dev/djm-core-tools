@@ -6,18 +6,12 @@ namespace DJM.CoreTools.Editor.SceneTools
 {
     internal sealed class SceneToolsSettingsProvider : SettingsProvider
     {
-        private const string OpenSceneIndexZeroOnExitingEditModeId = 
-            nameof(SceneToolsSettingsProvider) + "." + nameof(OpenSceneZeroOnExitingEditMode);
+        public const string Name = "Scene Tools";
+        public const string Path = DJM.PathBase + Name;
+        public const string SettingsLocation = "Project Settings/" + Path;
+        
+        public static bool OpenSceneZeroOnExitingEditMode => SceneToolsSettings.OpenSceneZeroOnExitingEditMode;
 
-        public const string Path = "Project Settings/" + DJM.PathRoot + "/Scene Tools";
-        
-        public static bool OpenSceneZeroOnExitingEditMode
-        {
-            get => EditorPrefs.GetBool(OpenSceneIndexZeroOnExitingEditModeId, false);
-            set => EditorPrefs.SetBool(OpenSceneIndexZeroOnExitingEditModeId, value);
-        }
-        
-        
         public SceneToolsSettingsProvider(string path, SettingsScope scopes) : base(path, scopes) { }
 
         public override void OnGUI(string searchContext)
@@ -51,14 +45,14 @@ namespace DJM.CoreTools.Editor.SceneTools
             
             if (openSceneZeroOnExitingEditModeValue != openSceneZeroOnExitingEditModeToggle)
             {
-                OpenSceneZeroOnExitingEditMode = openSceneZeroOnExitingEditModeToggle;
+                SceneToolsSettings.OpenSceneZeroOnExitingEditMode = openSceneZeroOnExitingEditModeToggle;
             }
         }
         
         [SettingsProvider]
         private static SettingsProvider CreateSceneToolsSettingsProvider()
         {
-            var provider = new SceneToolsSettingsProvider($"{DJM.PathRoot}/Scene Tools", SettingsScope.Project);
+            var provider = new SceneToolsSettingsProvider(Path, SettingsScope.Project);
             return provider;
         }
     }

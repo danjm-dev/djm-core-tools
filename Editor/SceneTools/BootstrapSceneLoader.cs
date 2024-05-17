@@ -11,8 +11,8 @@ namespace DJM.CoreTools.Editor.SceneTools
     internal static class BootstrapSceneLoader
     {
         private const string NoScenesAssignedToBuildMessage = 
-            nameof(BootstrapSceneLoader) + ": No scenes assigned to build settings. Either assign scenes to build settings or disable " + 
-            nameof(SceneToolsSettingsProvider.OpenSceneZeroOnExitingEditMode) + " in " + SceneToolsSettingsProvider.Path;
+            nameof(BootstrapSceneLoader) + ": No scenes assigned to build settings. Either assign scenes or disable " + 
+            nameof(SceneToolsSettingsProvider.OpenSceneZeroOnExitingEditMode) + " in " + SceneToolsSettingsProvider.SettingsLocation;
         
         private static readonly List<string> UnloadedScenePaths = new();
         private static int _activeSceneIndex;
