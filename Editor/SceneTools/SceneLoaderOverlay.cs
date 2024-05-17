@@ -9,14 +9,14 @@ using UnityEngine.SceneManagement;
 namespace DJM.CoreTools.Editor.SceneTools
 {
     [Overlay(typeof(SceneView), "Scene Selection")]
-    public sealed class SceneSelectionOverlay : ToolbarOverlay
+    internal sealed class SceneLoaderOverlay : ToolbarOverlay
     {
-        private SceneSelectionOverlay() : base(SceneDropdownToggle.Id) { }
+        private SceneLoaderOverlay() : base(SceneDropdownToggle.Id) { }
         
         [EditorToolbarElement(Id, typeof(SceneView))]
-        private sealed class SceneDropdownToggle : EditorToolbarDropdownToggle, IAccessContainerWindow
+        private sealed class SceneDropdownToggle : EditorToolbarDropdown, IAccessContainerWindow
         {
-            public const string Id = nameof(SceneSelectionOverlay) + "." + nameof(SceneDropdownToggle) + ".ID";
+            public const string Id = nameof(SceneLoaderOverlay) + "." + nameof(SceneDropdownToggle) + ".ID";
             
             private static readonly HashSet<string> LoadedSceneNameBuffer = new();
             
@@ -28,18 +28,18 @@ namespace DJM.CoreTools.Editor.SceneTools
                 tooltip = "Select a scene to load";
                 icon = EditorGUIUtility.IconContent("SceneAsset Icon").image as Texture2D;
                 
-                dropdownClicked += ShowSceneMenu;
+                clicked += ShowSceneMenu;
             }
 
             private static void ShowSceneMenu()
             {
                 LoadedSceneNameBuffer.Clear();
-                for (var i = 0; i < EditorSceneManager.sceneCount; i++)
+                for (var i = 0; i < SceneManager.sceneCount; i++)
                 {
-                    LoadedSceneNameBuffer.Add(EditorSceneManager.GetSceneAt(i).name);
+                    LoadedSceneNameBuffer.Add(SceneManager.GetSceneAt(i).name);
                 }
                 
-                var activeSceneName = EditorSceneManager.GetActiveScene().name;
+                var activeSceneName = SceneManager.GetActiveScene().name;
                 var menu = new GenericMenu();
                 var sceneGuids = AssetDatabase.FindAssets("t:Scene", new []{"Assets"});
                 
@@ -59,7 +59,7 @@ namespace DJM.CoreTools.Editor.SceneTools
                     
                     menu.AddItem(new GUIContent(name), isLoaded, () =>
                     {
-                        if (isLoaded) RemoveScene(EditorSceneManager.GetSceneByPath(path));
+                        if (isLoaded) RemoveScene(SceneManager.GetSceneByPath(path));
                         else AddScene(path);
                     });
                 }
