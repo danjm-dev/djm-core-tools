@@ -10,6 +10,23 @@ namespace DJM.CoreTools.Utilities
     public static class CoordinateUtils
     {
         /// <summary>
+        /// Converts a 1D position to coordinates.
+        /// </summary>
+        /// <param name="position">The position to convert.</param>
+        /// <param name="unitSize">The size of a unit.</param>
+        /// <param name="coordinates">The resulting 1D coordinates.</param>
+        [BurstCompile]
+        public static void PositionToCoordinates
+        (
+            in float position, 
+            in float unitSize, 
+            out int coordinates
+        )
+        {
+            coordinates = (int)math.floor(position / unitSize);
+        }
+        
+        /// <summary>
         /// Converts a 2D position to coordinates.
         /// </summary>
         /// <param name="position">The position to convert.</param>
@@ -44,6 +61,23 @@ namespace DJM.CoreTools.Utilities
         }
         
         /// <summary>
+        /// Converts 1D coordinates to a position.
+        /// </summary>
+        /// <param name="coordinates">The coordinates to convert.</param>
+        /// <param name="unitSize">The size of a unit.</param>
+        /// <param name="position">The resulting 1D position.</param>
+        [BurstCompile]
+        public static void CoordinatesToPosition
+        (
+            in int coordinates, 
+            in float unitSize, 
+            out float position
+        )
+        {
+            position = coordinates * unitSize;
+        }
+        
+        /// <summary>
         /// Converts 2D coordinates to a position.
         /// </summary>
         /// <param name="coordinates">The coordinates to convert.</param>
@@ -75,6 +109,25 @@ namespace DJM.CoreTools.Utilities
         )
         {
             position = coordinates * unitSize;
+        }
+        
+        /// <summary>
+        /// Converts 1D coordinates to a position with a offset.
+        /// </summary>
+        /// <param name="coordinates">The coordinates to convert.</param>
+        /// <param name="unitSize">The size of a unit.</param>
+        /// <param name="offset">The amount to offset the position by.</param>
+        /// <param name="position">The resulting 1D position.</param>
+        [BurstCompile]
+        public static void CoordinatesToPosition
+        (
+            in int coordinates, 
+            in float unitSize, 
+            in float offset,
+            out float position
+        )
+        {
+            position = coordinates * unitSize + offset;
         }
         
         /// <summary>
