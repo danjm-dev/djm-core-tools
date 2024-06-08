@@ -33,5 +33,36 @@ namespace DJM.CoreTools.Utilities
                 direction.x * sinTheta + direction.y * cosTheta
             );
         }
+        
+        [BurstCompile]
+        public static void ClampMagnitude(ref float2 vector, in float maxLength)
+        {
+            var sqrMagnitude = math.lengthsq(vector);
+            if (sqrMagnitude <= maxLength * maxLength) return;
+            
+            var num1 = math.sqrt(sqrMagnitude);
+            
+            vector = new float2
+            (
+                vector.x / num1 * maxLength, 
+                vector.y / num1 * maxLength
+            );
+        }
+        
+        [BurstCompile]
+        public static void ClampMagnitude(ref float3 vector, in float maxLength)
+        {
+            var sqrMagnitude = math.lengthsq(vector);
+            if (sqrMagnitude <= maxLength * maxLength) return;
+            
+            var num1 = math.sqrt(sqrMagnitude);
+            
+            vector = new float3
+            (
+                vector.x / num1 * maxLength, 
+                vector.y / num1 * maxLength, 
+                vector.z / num1 * maxLength
+            );
+        }
     }
 }
