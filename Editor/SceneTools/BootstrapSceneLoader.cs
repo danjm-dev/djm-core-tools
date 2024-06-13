@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -47,7 +48,7 @@ namespace DJM.CoreTools.Editor.SceneTools
             ClearUnloadedScenePaths();
             
             if(!SceneToolsSettingsProvider.OpenSceneZeroOnExitingEditMode) return;
-
+            
             if (SceneManager.sceneCountInBuildSettings <= 0)
             {
                 Debug.LogError(NoScenesAssignedToBuildMessage);
@@ -75,8 +76,8 @@ namespace DJM.CoreTools.Editor.SceneTools
                 ClearUnloadedScenePaths();
                 return;
             }
-
-            EditorSceneManager.OpenScene(SceneManager.GetSceneByBuildIndex(0).path, OpenSceneMode.Single);
+            
+            EditorSceneManager.OpenScene(EditorBuildSettings.scenes[0].path, OpenSceneMode.Single);
         }
 
         private static void OnEnteredPlayMode()
@@ -95,7 +96,7 @@ namespace DJM.CoreTools.Editor.SceneTools
                 EditorSceneManager.LoadSceneInPlayMode(path, new LoadSceneParameters(LoadSceneMode.Additive));
             }
         }
-
+        
         private static void OnEnteredEditMode()
         {
             for (var i = 0; i < UnloadedScenePaths.Count; i++)

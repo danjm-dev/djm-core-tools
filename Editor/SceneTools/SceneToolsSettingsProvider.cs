@@ -18,30 +18,26 @@ namespace DJM.CoreTools.Editor.SceneTools
         {
             base.OnGUI(searchContext);
             
-            GUILayout.Space(20f);
-            EditorGUILayout.LabelField("Build Index 0 Scene", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
-            GUILayout.Space(5f);
-
-            if (SceneManager.sceneCountInBuildSettings > 0)
-            {
-                EditorGUILayout.LabelField(SceneManager.GetSceneByBuildIndex(0).name);
-            }
-            else
-            {
-                EditorGUILayout.LabelField
-                (
-                    "NO SCENES ASSIGNED TO BUILD", 
-                    new GUIStyle(GUI.skin.label) { normal = { textColor = Color.red } }
-                );
-            }
-            
             var openSceneZeroOnExitingEditModeValue = OpenSceneZeroOnExitingEditMode;
+            var disabled = SceneManager.sceneCountInBuildSettings < 1;
+            
+            
+            GUILayout.Space(20f);
+            EditorGUI.BeginDisabledGroup(disabled);
             var openSceneZeroOnExitingEditModeToggle = EditorGUILayout.Toggle
             (
-                "Open on exiting edit mode", 
+                "Preload Index 0 Scene", 
                 openSceneZeroOnExitingEditModeValue, 
                 GUILayout.Width(200f)
             );
+            EditorGUI.EndDisabledGroup();
+
+            
+            if (disabled)
+            {
+                SceneToolsSettings.OpenSceneZeroOnExitingEditMode = false;
+                return;
+            }
             
             if (openSceneZeroOnExitingEditModeValue != openSceneZeroOnExitingEditModeToggle)
             {
