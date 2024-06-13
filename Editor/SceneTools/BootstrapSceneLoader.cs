@@ -27,43 +27,24 @@ namespace DJM.CoreTools.Editor.SceneTools
             switch (state)
             {
                 case PlayModeStateChange.EnteredEditMode:
+                    Debug.LogWarning("Entered Edit Mode");
                     OnEnteredEditMode();
                     break;
-                
                 case PlayModeStateChange.ExitingEditMode:
+                    Debug.LogWarning("Exiting Edit Mode");
                     OnExitingEditMode();
                     break;
-                
                 case PlayModeStateChange.EnteredPlayMode:
+                    Debug.LogWarning("Entered Play Mode");
+                    OnEnteredPlayMode();
                     break;
                 case PlayModeStateChange.ExitingPlayMode:
+                    Debug.LogWarning("Exiting Play Mode");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }
         }
-
-        private static void OnEnteredEditMode()
-        {
-            for (var i = 0; i < UnloadedScenePaths.Count; i++)
-            {
-                EditorSceneManager.OpenScene
-                (
-                    UnloadedScenePaths[i], 
-                    i == 0 ? OpenSceneMode.Single : OpenSceneMode.Additive
-                );
-            }
-
-            if (_activeSceneIndex < 0 || _activeSceneIndex >= SceneManager.sceneCount)
-            {
-                ClearUnloadedScenePaths();
-                return;
-            }
-            
-            SceneManager.SetActiveScene(SceneManager.GetSceneByPath(UnloadedScenePaths[_activeSceneIndex]));
-            ClearUnloadedScenePaths();
-        }
-
         
         private static void OnExitingEditMode()
         {
@@ -100,6 +81,44 @@ namespace DJM.CoreTools.Editor.SceneTools
             }
 
             EditorSceneManager.OpenScene(SceneManager.GetSceneByBuildIndex(0).path, OpenSceneMode.Single);
+        }
+
+        private static void OnEnteredPlayMode()
+        {
+            if(!SceneToolsSettingsProvider.OpenSceneZeroOnExitingEditMode) return;
+            
+            var loadedScenePaths = new List<string>();
+            for (var i = 0; i < SceneManager.loadedSceneCount; i++)
+            {
+                loadedScenePaths.Add(SceneManager.GetSceneAt(i).path);
+            }
+            
+            foreach (var path in UnloadedScenePaths)
+            {
+                if (loadedScenePaths.Contains(path)) continue;
+                EditorSceneManager.LoadSceneInPlayMode(path, new LoadSceneParameters(LoadSceneMode.Additive));
+            }
+        }
+
+        private static void OnEnteredEditMode()
+        {
+            for (var i = 0; i < UnloadedScenePaths.Count; i++)
+            {
+                EditorSceneManager.OpenScene
+                (
+                    UnloadedScenePaths[i], 
+                    i == 0 ? OpenSceneMode.Single : OpenSceneMode.Additive
+                );
+            }
+
+            if (_activeSceneIndex < 0 || _activeSceneIndex >= SceneManager.sceneCount)
+            {
+                ClearUnloadedScenePaths();
+                return;
+            }
+            
+            SceneManager.SetActiveScene(SceneManager.GetSceneByPath(UnloadedScenePaths[_activeSceneIndex]));
+            ClearUnloadedScenePaths();
         }
         
         private static void ClearUnloadedScenePaths()
