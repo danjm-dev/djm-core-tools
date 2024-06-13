@@ -27,19 +27,15 @@ namespace DJM.CoreTools.Editor.SceneTools
             switch (state)
             {
                 case PlayModeStateChange.EnteredEditMode:
-                    Debug.LogWarning("Entered Edit Mode");
                     OnEnteredEditMode();
                     break;
                 case PlayModeStateChange.ExitingEditMode:
-                    Debug.LogWarning("Exiting Edit Mode");
                     OnExitingEditMode();
                     break;
                 case PlayModeStateChange.EnteredPlayMode:
-                    Debug.LogWarning("Entered Play Mode");
                     OnEnteredPlayMode();
                     break;
                 case PlayModeStateChange.ExitingPlayMode:
-                    Debug.LogWarning("Exiting Play Mode");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(state), state, null);
