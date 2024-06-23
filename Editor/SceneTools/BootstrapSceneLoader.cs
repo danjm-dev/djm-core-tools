@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -21,6 +20,7 @@ namespace DJM.CoreTools.Editor.SceneTools
         static BootstrapSceneLoader()
         {
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         
         private static void OnPlayModeStateChanged(PlayModeStateChange state)
@@ -89,9 +89,10 @@ namespace DJM.CoreTools.Editor.SceneTools
             {
                 loadedScenePaths.Add(SceneManager.GetSceneAt(i).path);
             }
-            
-            foreach (var path in UnloadedScenePaths)
+
+            for (var i = 0; i < UnloadedScenePaths.Count; i++)
             {
+                var path = UnloadedScenePaths[i];
                 if (loadedScenePaths.Contains(path)) continue;
                 EditorSceneManager.LoadSceneInPlayMode(path, new LoadSceneParameters(LoadSceneMode.Additive));
             }
@@ -116,6 +117,18 @@ namespace DJM.CoreTools.Editor.SceneTools
             
             SceneManager.SetActiveScene(SceneManager.GetSceneByPath(UnloadedScenePaths[_activeSceneIndex]));
             ClearUnloadedScenePaths();
+        }
+        
+        private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if(!SceneToolsSettingsProvider.OpenSceneZeroOnExitingEditMode) return;
+            if (_activeSceneIndex < 0 || _activeSceneIndex >= SceneManager.sceneCount) return;
+            
+            var activeScene = SceneManager.GetSceneByPath(UnloadedScenePaths[_activeSceneIndex]);
+            
+            if(activeScene != scene) return;
+            
+            SceneManager.SetActiveScene(activeScene);
         }
         
         private static void ClearUnloadedScenePaths()
