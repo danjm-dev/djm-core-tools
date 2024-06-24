@@ -64,5 +64,17 @@ namespace DJM.CoreTools.Utilities
                 vector.z / num1 * maxLength
             );
         }
+
+        [BurstCompile]
+        public static float GetEclipseRadius(in float2 direction, in float2 axisRadii)
+        {
+            var directionX = axisRadii.y * direction.x;
+            var directionY = axisRadii.x * direction.y;
+            
+            var directionXSquare = directionX * directionX;
+            var directionYSquare = directionY * directionY;
+
+            return axisRadii.x * axisRadii.y / math.sqrt(directionXSquare + directionYSquare);
+        }
     }
 }
