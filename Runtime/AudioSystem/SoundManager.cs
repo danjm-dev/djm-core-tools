@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Pool;
 
 namespace DJM.CoreTools.AudioSystem
@@ -10,28 +11,58 @@ namespace DJM.CoreTools.AudioSystem
         private const string EmitterObjectName = "[Sound Emitter]";
         private static readonly Type[] EmitterComponents = {typeof(AudioSource), typeof(SoundEmitter)};
         
-        private readonly List<SoundEmitter> _activeEmitters = new();
-        private readonly Queue<SoundEmitter> _frequentSoundEmitters = new();
-        private IObjectPool<SoundEmitter> _pool;
-        
         [SerializeField] private bool collectionCheck;
         [SerializeField] private int defaultCapacity = 10;
         [SerializeField] private int maxPoolSize = 100;
-        [SerializeField] private int maxSoundInstances = 32;
+        [SerializeField] private int maxFrequentSoundInstances = 32;
 
-        private void Start() => InitializePool();
+        private readonly List<SoundEmitter> _activeEmitters = new();
+        private readonly LinkedList<SoundEmitter> _activeFrequentEmitters = new();
+        private IObjectPool<SoundEmitter> _pool;
+        
+        private void Awake() => InitializePool();
         private void Update() => ReleaseIdleEmitters();
         
-        public void PlaySound(SoundData soundData, Vector3 position = default, float pitch = 1f)
+        public void PlaySound
+        (
+            AudioClip audioClip, 
+            AudioMixerGroup mixerGroup = null, 
+            Vector3 position = default, 
+            float volume = 1f, 
+            float pitch = 1f
+        )
         {
             var emitter = _pool.Get();
             _activeEmitters.Add(emitter);
-            emitter.Initialize(soundData);
-            emitter.Position = position;
-            emitter.Pitch = pitch;
-
-            if (soundData.FrequentSound) EnqueueFrequentSound(emitter);
+            emitter.Initialize(audioClip, mixerGroup, position, volume, pitch);
+            emitter.Play();
+        }
+        
+        public void PlayFrequentSound
+        (
+            AudioClip audioClip, 
+            AudioMixerGroup mixerGroup = null, 
+            Vector3 position = default, 
+            float volume = 1f, 
+            float pitch = 1f
+        )
+        {
+            SoundEmitter emitter;
             
+            if (_activeFrequentEmitters.Count >= maxFrequentSoundInstances)
+            {
+                emitter = _activeFrequentEmitters.First.Value;
+                emitter.Stop();
+                _activeFrequentEmitters.RemoveFirst();
+            }
+            else
+            {
+                emitter = _pool.Get();
+            }
+            
+            _activeFrequentEmitters.AddLast(emitter);
+            
+            emitter.Initialize(audioClip, mixerGroup, position, volume, pitch);
             emitter.Play();
         }
         
@@ -48,20 +79,7 @@ namespace DJM.CoreTools.AudioSystem
                 maxPoolSize
             );
         }
-        
-        private void EnqueueFrequentSound(SoundEmitter emitter)
-        {
-            if (_frequentSoundEmitters.Count >= maxSoundInstances && 
-                _frequentSoundEmitters.TryDequeue(out var oldestEmitter))
-            {
-                // issue: may have been released but not removed from queue
-                oldestEmitter.Stop();
-            }
-            
-            _frequentSoundEmitters.Enqueue(emitter);
-        }
 
-        // issue: frequent sound emitters can be released but not removed from queue
         private void ReleaseIdleEmitters()
         {
             for (var i = _activeEmitters.Count - 1; i >= 0; i--)
@@ -70,6 +88,18 @@ namespace DJM.CoreTools.AudioSystem
                 if(emitter.IsPlaying) continue;
                 _activeEmitters.RemoveAt(i);
                 _pool.Release(emitter);
+            }
+
+            var node = _activeFrequentEmitters.First;
+            while (node != null)
+            {
+                var nextNode = node.Next;
+                if (!node.Value.IsPlaying)
+                {
+                    _pool.Release(node.Value);
+                    _activeFrequentEmitters.Remove(node);
+                }
+                node = nextNode;
             }
         }
 
@@ -90,6 +120,7 @@ namespace DJM.CoreTools.AudioSystem
         
         private static void OnReleaseEmitter(SoundEmitter emitter)
         {
+            emitter.Clear();
             emitter.gameObject.SetActive(false);
         }
         
