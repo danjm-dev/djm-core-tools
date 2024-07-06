@@ -1,4 +1,4 @@
-using DJM.Utilities.Extensions;
+using DJM.Utilities;
 using UnityEngine;
 
 namespace DJM.CoreTools.ServiceLocator 
