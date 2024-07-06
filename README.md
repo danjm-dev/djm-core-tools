@@ -12,7 +12,7 @@
 <h3 align="center">DJM Core Tools</h3>
 
   <p align="center">
-    Core tools and utilities for Unity game development.
+    Core tools for Unity game development.
     <br />
     <a href="https://github.com/danjm-dev/djm-core-tools"><strong>Explore the docs »</strong></a>
     <br />
@@ -51,7 +51,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-DJM Core Tools is a set of utilities, extensions, and services I use across Unity projects.
+DJM Core Tools is a set of tools and services for use in Unity projects.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -111,9 +111,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 ## Acknowledgements
 
 - Service Locator implementation based on [Unity-Service-Locator](https://github.com/adammyhre/Unity-Service-Locator) on by [adammyhre](https://github.com/adammyhre).
-- Some extensions based on [Unity-Utils](https://github.com/adammyhre/Unity-Utils) by [adammyhre](https://github.com/adammyhre).
 - Priority Queue port from [PriorityQueue](https://github.com/FyiurAmron/PriorityQueue) by [FyiurAmron](https://github.com/FyiurAmron).
-- ConfigurableJointExtensions from [configurablejointextensions](https://gist.github.com/mstevenson/7b85893e8caf5ca034e6#file-configurablejointextensions-cs) by [mstevenson](https://github.com/mstevenson).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

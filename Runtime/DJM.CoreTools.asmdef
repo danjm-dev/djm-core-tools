@@ -3,7 +3,8 @@
     "rootNamespace": "DJM.CoreTools",
     "references": [
         "GUID:2665a8d13d1b3f18800f46e256720795",
-        "GUID:d8b63aba1907145bea998dd612889d6b"
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:079e14d1d21625a419f93b4449f7f7e7"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
