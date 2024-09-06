@@ -43,6 +43,8 @@ namespace DJM.CoreTools.AudioSystem
         }
 
         public void Play() => _source.Play();
+        public void Pause() => _source.Pause();
+        public void UnPause() => _source.UnPause();
         public void Stop() => _source.Stop();
     }
 }

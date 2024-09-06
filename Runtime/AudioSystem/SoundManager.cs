@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DJM.Utilities;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Pool;
@@ -11,59 +12,72 @@ namespace DJM.CoreTools.AudioSystem
         private const string EmitterObjectName = "[Sound Emitter]";
         private static readonly Type[] EmitterComponents = {typeof(AudioSource), typeof(SoundEmitter)};
         
+        [SerializeField] private Transform emitterParent;
         [SerializeField] private bool collectionCheck;
         [SerializeField] private int defaultCapacity = 10;
         [SerializeField] private int maxPoolSize = 100;
-        [SerializeField] private int maxFrequentSoundInstances = 32;
+        [SerializeField] private int maxLowPriorityEmitterInstances = 32;
 
-        private readonly List<SoundEmitter> _activeEmitters = new();
-        private readonly LinkedList<SoundEmitter> _activeFrequentEmitters = new();
+        private readonly HashSet<SoundEmitter> _checkedOutEmitters = new();
+        private readonly List<SoundEmitter> _activeHighPriorityEmitters = new();
+        private readonly LinkedList<SoundEmitter> _activeLowPriorityEmitters = new();
         private IObjectPool<SoundEmitter> _pool;
         
         private void Awake() => InitializePool();
         private void Update() => ReleaseIdleEmitters();
+
+        public SoundEmitter CheckOutEmitter()
+        {
+            var emitter = _pool.Get();
+            _checkedOutEmitters.Add(emitter);
+            return emitter;
+        }
         
-        public void PlaySound
+        public void ReturnEmitter(SoundEmitter emitter)
+        {
+            if (!_checkedOutEmitters.Remove(emitter)) return;
+            _pool.Release(emitter);
+        }
+        
+        public void PlayTransientSound
         (
-            AudioClip audioClip, 
-            AudioMixerGroup mixerGroup = null, 
-            Vector3 position = default, 
-            float volume = 1f, 
+            AudioClip audioClip,
+            TransientSoundPriority priority = TransientSoundPriority.Low,
+            AudioMixerGroup mixerGroup = null,
+            Vector3 position = default,
+            float volume = 1f,
             float pitch = 1f
         )
         {
-            var emitter = _pool.Get();
-            _activeEmitters.Add(emitter);
+            var emitter = priority == TransientSoundPriority.Low 
+                ? GetLowPriorityEmitter() 
+                : GetHighPriorityEmitter();
+            
             emitter.Initialize(audioClip, mixerGroup, position, volume, pitch);
             emitter.Play();
         }
         
-        public void PlayFrequentSound
-        (
-            AudioClip audioClip, 
-            AudioMixerGroup mixerGroup = null, 
-            Vector3 position = default, 
-            float volume = 1f, 
-            float pitch = 1f
-        )
+        private SoundEmitter GetHighPriorityEmitter()
         {
-            SoundEmitter emitter;
-            
-            if (_activeFrequentEmitters.Count >= maxFrequentSoundInstances)
+            var emitter = _pool.Get();
+            _activeHighPriorityEmitters.Add(emitter);
+            return emitter;
+        }
+        
+        private SoundEmitter GetLowPriorityEmitter()
+        {
+            if (_activeLowPriorityEmitters.Count >= maxLowPriorityEmitterInstances)
             {
-                emitter = _activeFrequentEmitters.First.Value;
+                var emitter = _activeLowPriorityEmitters.First.Value;
                 emitter.Stop();
-                _activeFrequentEmitters.RemoveFirst();
-            }
-            else
-            {
-                emitter = _pool.Get();
+                _activeLowPriorityEmitters.RemoveFirst();
+                _activeLowPriorityEmitters.AddLast(emitter);
+                return emitter;
             }
             
-            _activeFrequentEmitters.AddLast(emitter);
-            
-            emitter.Initialize(audioClip, mixerGroup, position, volume, pitch);
-            emitter.Play();
+            var newEmitter = _pool.Get();
+            _activeLowPriorityEmitters.AddLast(newEmitter);
+            return newEmitter;
         }
         
         private void InitializePool()
@@ -82,22 +96,22 @@ namespace DJM.CoreTools.AudioSystem
 
         private void ReleaseIdleEmitters()
         {
-            for (var i = _activeEmitters.Count - 1; i >= 0; i--)
+            for (var i = _activeHighPriorityEmitters.Count - 1; i >= 0; i--)
             {
-                var emitter = _activeEmitters[i];
+                var emitter = _activeHighPriorityEmitters[i];
                 if(emitter.IsPlaying) continue;
-                _activeEmitters.RemoveAt(i);
+                _activeHighPriorityEmitters.RemoveAt(i);
                 _pool.Release(emitter);
             }
 
-            var node = _activeFrequentEmitters.First;
+            var node = _activeLowPriorityEmitters.First;
             while (node != null)
             {
                 var nextNode = node.Next;
                 if (!node.Value.IsPlaying)
                 {
                     _pool.Release(node.Value);
-                    _activeFrequentEmitters.Remove(node);
+                    _activeLowPriorityEmitters.Remove(node);
                 }
                 node = nextNode;
             }
@@ -107,7 +121,7 @@ namespace DJM.CoreTools.AudioSystem
         {
             var go = new GameObject(EmitterObjectName, EmitterComponents)
             {
-                transform = { parent = transform }
+                transform = { parent = emitterParent.OrNull() ?? transform }
             };
             go.SetActive(false);
             return go.GetComponent<SoundEmitter>();
