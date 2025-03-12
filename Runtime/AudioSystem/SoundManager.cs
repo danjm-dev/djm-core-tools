@@ -140,7 +140,9 @@ namespace DJM.CoreTools.AudioSystem
         
         private static void OnDestroyEmitter(SoundEmitter emitter)
         {
-            Destroy(emitter.gameObject);
+            var emitterGameObject = emitter.OrNull()?.gameObject.OrNull();
+            if(emitterGameObject is null) return;
+            Destroy(emitterGameObject);
         }
     }
 }
