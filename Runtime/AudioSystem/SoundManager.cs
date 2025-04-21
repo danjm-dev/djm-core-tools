@@ -7,7 +7,7 @@ using UnityEngine.Pool;
 
 namespace DJM.CoreTools.AudioSystem
 {
-    public sealed class SoundManager : MonoBehaviour
+    public class SoundManager : MonoBehaviour
     {
         private const string EmitterObjectName = "[Sound Emitter]";
         private static readonly Type[] EmitterComponents = {typeof(AudioSource), typeof(SoundEmitter)};
