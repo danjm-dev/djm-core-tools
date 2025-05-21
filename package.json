@@ -1,7 +1,7 @@
 {
   "name": "com.djm.coretools",
   "displayName": "DJM Core Tools",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "dependencies": {
     "com.unity.mathematics": "1.2.6",
     "com.unity.burst": "1.8.13",

@@ -6,15 +6,15 @@ namespace DJM.CoreTools.AudioSystem
     [RequireComponent(typeof(AudioSource))]
     public sealed class SoundEmitter : MonoBehaviour
     {
-        private AudioSource _source;
+        public AudioSource Source { get; private set; }
 
-        public bool IsPlaying => _source.isPlaying;
+        public bool IsPlaying => Source.isPlaying;
         
         private void Awake()
         {
-            _source = GetComponent<AudioSource>();
-            _source.playOnAwake = false;
-            _source.loop = false;
+            Source = GetComponent<AudioSource>();
+            Source.playOnAwake = false;
+            Source.loop = false;
         }
 
         public void Initialize
@@ -26,25 +26,26 @@ namespace DJM.CoreTools.AudioSystem
             float pitch
         )
         {
-            _source.clip = audioClip;
-            _source.outputAudioMixerGroup = mixerGroup;
+            Source.clip = audioClip;
+            Source.outputAudioMixerGroup = mixerGroup;
             transform.position = position;
-            _source.volume = volume;
-            _source.pitch = pitch;
+            Source.volume = volume;
+            Source.pitch = pitch;
         }
         
         public void Clear()
         {
-            _source.clip = null;
-            _source.outputAudioMixerGroup = null;
+            Source.clip = null;
+            Source.outputAudioMixerGroup = null;
             transform.position = Vector3.zero;
-            _source.volume = 1f;
-            _source.pitch = 1f;
+            Source.volume = 1f;
+            Source.pitch = 1f;
         }
 
-        public void Play() => _source.Play();
-        public void Pause() => _source.Pause();
-        public void UnPause() => _source.UnPause();
-        public void Stop() => _source.Stop();
+        public void Play() => Source.Play();
+        public void Play(float delay) => Source.PlayDelayed(delay);
+        public void Pause() => Source.Pause();
+        public void UnPause() => Source.UnPause();
+        public void Stop() => Source.Stop();
     }
 }

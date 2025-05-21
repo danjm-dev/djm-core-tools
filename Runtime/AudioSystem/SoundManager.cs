@@ -46,7 +46,8 @@ namespace DJM.CoreTools.AudioSystem
             AudioMixerGroup mixerGroup = null,
             Vector3 position = default,
             float volume = 1f,
-            float pitch = 1f
+            float pitch = 1f,
+            float delay = 0f
         )
         {
             var emitter = priority == TransientSoundPriority.Low 
@@ -54,7 +55,9 @@ namespace DJM.CoreTools.AudioSystem
                 : GetHighPriorityEmitter();
             
             emitter.Initialize(audioClip, mixerGroup, position, volume, pitch);
-            emitter.Play();
+            
+            if(delay > Mathf.Epsilon) emitter.Play(delay);
+            else emitter.Play();
         }
         
         private SoundEmitter GetHighPriorityEmitter()
